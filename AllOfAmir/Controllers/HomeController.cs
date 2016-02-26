@@ -12,5 +12,15 @@ namespace AllOfAmir.Controllers
         {
             return View();
         }
+
+        public ActionResult Personal()
+        {
+            return View();
+        }
+
+        public ActionResult Professional()
+        {
+            return View();
+        }
     }
 }
