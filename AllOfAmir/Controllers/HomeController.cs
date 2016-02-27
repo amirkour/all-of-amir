@@ -19,6 +19,7 @@ namespace AllOfAmir.Controllers
             logger.Warn("Hi world warn");
             logger.Error("Hi world error");
             logger.Fatal("Hi world fatal");
+            System.Diagnostics.Trace.TraceError("If you're seeing this, something bad happened");
 
             return View();
         }
