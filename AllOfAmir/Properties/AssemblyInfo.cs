@@ -33,3 +33,12 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("0.0.0.2")]
 [assembly: AssemblyFileVersion("0.0.0.2")]
+
+
+// Configure log4net
+// See notes here for more info: http://logging.apache.org/log4net/release/manual/configuration.html
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config.xml", Watch = true)]
+// This will cause log4net to look for a configuration file
+// called log4net.config.xml in the application base
+// directory.
+// The config file will be watched for changes.
