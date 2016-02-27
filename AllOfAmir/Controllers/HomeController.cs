@@ -14,12 +14,13 @@ namespace AllOfAmir.Controllers
 
         public ActionResult Index()
         {
-            logger.Debug("Hi world debug");
-            logger.Info("Hi world info");
-            logger.Warn("Hi world warn");
-            logger.Error("Hi world error");
-            logger.Fatal("Hi world fatal");
-            System.Diagnostics.Trace.TraceError("If you're seeing this, something bad happened");
+            // prints to console by default w/ a newline, but no timestamps included
+            System.Diagnostics.Debug.Print("Hi world debug via Print");
+
+            // same as "Debug" api, but w/ timestamps
+            System.Diagnostics.Trace.TraceInformation("Hi world info");
+            System.Diagnostics.Trace.TraceWarning("Hi world warn");
+            System.Diagnostics.Trace.TraceError("Hi world error");
 
             return View();
         }

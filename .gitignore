@@ -18,3 +18,4 @@ nuget.exe
 PublishProfiles/
 
 *.log
+*.log.*
