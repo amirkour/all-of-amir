@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Boggle!?</h2>
+<button type="button" id="test-button" class="btn">Click to test</button>
+
+@section scripts{ 
+    <script type="text/javascript">
+    (function ($, window, document, undefined) {
+
+        var board_model = [
+                ['a', 'b', 'c', 'd'],
+                ['e', 'f', 'g', 'h'],
+                ['i', 'j', 'k', 'l'],
+                ['m', 'n', 'o', 'p']
+            ],
+            service_url = "@Url.Action("GetBoggleWords", "Boggle")";
+
+        $("#test-button").click(function () {
+            $.post({
+                url: service_url,
+                data: {
+                    board: board_model
+                },
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    alert('got success');
+                },
+                error: function (jqXHR, textStatus, errorMsg) {
+                    alert("got an error");
+                }
+            });
+        });
+
+    })(jQuery, window, document);
+    </script>
+}
