@@ -7,7 +7,7 @@
 
 @section scripts{ 
     <script type="text/javascript">
-    (function ($, window, document, undefined) {
+    (function ($, aoa, window, document, undefined) {
 
         var board_model = [
                 ['a', 'b', 'c', 'd'],
@@ -20,19 +20,15 @@
         $("#test-button").click(function () {
             $.post({
                 url: service_url,
-                data: {
-                    board: board_model
-                },
+                data: { board: board_model },
                 dataType: 'json',
                 success: function (data, textStatus, jqXHR) {
-                    alert('got success');
+                    alert('got success - TODO: please implement me');
                 },
-                error: function (jqXHR, textStatus, errorMsg) {
-                    alert("got an error");
-                }
+                error: aoa.ajaxErrorHandler
             });
         });
 
-    })(jQuery, window, document);
+    })(jQuery, aoa, window, document);
     </script>
 }

@@ -9,32 +9,13 @@
 </head>
 <body>
     <div class="container">
+
+        <div id="global-error" class="alert alert-danger"></div>
         @RenderBody()
+
     </div>
 
     @Scripts.Render("~/bundles/scripts")
-
-    @* all our ajax posts should include the csrf anti-forgery token *@
-    <script type="text/javascript">
-        (function ($, window, document, undefined) {
-
-            var token_input_name = '__RequestVerificationToken',
-                token = $("input[name='" + token_input_name + "'").val(),
-                token_encoded = encodeURI(token);
-
-            $(document).ajaxSend(function (event, jqXHR, ajaxOptions) {
-
-                if (typeof ajaxOptions.type !== 'string') return;
-                if (ajaxOptions.type.toUpperCase() !== 'POST') return;
-
-                if (typeof ajaxOptions.data !== 'string' || ajaxOptions.data.length <= 0)
-                    ajaxOptions.data = token_input_name + "=" + token_encoded;
-                else if(ajaxOptions.data.length > 0)
-                    ajaxOptions.data += "&" + token_input_name + "=" + token_encoded;
-            });
-        })(jQuery,window,document);
-    </script>
-
     @RenderSection("scripts", required: false)
 </body>
 </html>
