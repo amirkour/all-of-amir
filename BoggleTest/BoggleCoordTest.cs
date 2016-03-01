@@ -57,5 +57,17 @@ namespace BoggleTest
             Assert.IsFalse(BoggleCoord.TryDeserializeAsJson("hi there", out result));
             Assert.IsNull(result);
         }
+
+        [TestMethod]
+        public void BoggleCoordTest_ToJson_Works()
+        {
+            BoggleCoord coord = new BoggleCoord();
+            string json = JsonConvert.SerializeObject(coord);
+            Assert.AreEqual(coord.ToJson(), json);
+
+            coord = new BoggleCoord() { Row = 2, Col = 23 };
+            json = JsonConvert.SerializeObject(coord);
+            Assert.AreEqual(coord.ToJson(), json);
+        }
     }
 }

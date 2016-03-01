@@ -33,6 +33,14 @@ namespace Boggle
         }
 
         /// <summary>
+        /// Helper that simply serializes this instance and returns it
+        /// </summary>
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        /// <summary>
         /// Helper that will deserialize the given json string to a BoggleCoord
         /// and return it (or null if the given string is invalid json.)
         /// </summary>
