@@ -19,3 +19,5 @@ PublishProfiles/
 
 *.log
 *.log.*
+
+applicationhost.config
