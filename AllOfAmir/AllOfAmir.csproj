@@ -224,6 +224,10 @@
     <Content Include="Views\Boggle\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Boggle\Boggle.csproj">
+      <Project>{85f707f3-1dc8-4d58-87d1-226371cb0771}</Project>
+      <Name>Boggle</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
       <Project>{7735820b-ac15-4a64-a820-5b0b382abefd}</Project>
       <Name>DotNetUtils</Name>
