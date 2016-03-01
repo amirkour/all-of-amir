@@ -84,5 +84,94 @@ namespace BoggleTest
             Assert.IsTrue(BoggleResult.TryDeserializeAsJson(json, out deserialized));
             Assert.AreEqual(result, deserialized);
         }
+
+        [TestMethod]
+        public void BoggleResultTest_Equals_ReturnsTrue_WhenListsAreBothNull()
+        {
+            BoggleResult one = new BoggleResult() { Coords = null };
+            BoggleResult two = new BoggleResult() { Coords = null };
+            Assert.AreEqual(one, two);
+            Assert.AreEqual(two, one);
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_Equals_ReturnsTrue_WhenListsAreBothEmpty()
+        {
+            BoggleResult one = new BoggleResult() { Coords = new List<BoggleCoord>() };
+            BoggleResult two = new BoggleResult() { Coords = new List<BoggleCoord>() };
+            Assert.AreEqual(one, two);
+            Assert.AreEqual(two, one);
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_Equals_ReturnsFalse_WhenOneListIsNull()
+        {
+            BoggleResult one = new BoggleResult() { Coords = new List<BoggleCoord>() };
+            BoggleResult two = new BoggleResult() { Coords = null };
+            Assert.AreNotEqual(one, two);
+            Assert.AreNotEqual(two, one);
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_Equals_ReturnsTrue_WhenCoordListsAreEqual()
+        {
+            BoggleResult one = new BoggleResult() { Coords = new List<BoggleCoord>() };
+            BoggleResult two = new BoggleResult() { Coords = new List<BoggleCoord>() };
+
+            BoggleCoord coordOne = new BoggleCoord() { Row = 1, Col = 2 };
+            one.Coords.Add(coordOne);
+            two.Coords.Add(coordOne);
+            Assert.AreEqual(one, two);
+            Assert.AreEqual(two, one);
+
+            one.Coords.Add(new BoggleCoord() { Row = 123123, Col = 234234 });
+            two.Coords.Add(new BoggleCoord() { Row = 123123, Col = 234234 });
+            Assert.AreEqual(one, two);
+            Assert.AreEqual(two, one);
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_Equals_ReturnsFalse_WhenCoordListsAreUnequal()
+        {
+            BoggleResult one = new BoggleResult() { Coords = new List<BoggleCoord>() };
+            BoggleResult two = new BoggleResult() { Coords = new List<BoggleCoord>() };
+
+            one.Coords.Add(new BoggleCoord() { Row = 1 });
+            two.Coords.Add(new BoggleCoord() { Row = 2 });
+
+            Assert.AreNotEqual(one, two);
+            Assert.AreNotEqual(two, one);
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_Equals_ReturnsTrue_WhenWordsAreEqual()
+        {
+            BoggleResult one = new BoggleResult() { Word = "hi" };
+            BoggleResult two = new BoggleResult() { Word = "hi" };
+            Assert.AreEqual(one, two);
+            Assert.AreEqual(two, one);
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_Equals_ReturnsTrue_WhenWordsBothNull()
+        {
+            BoggleResult one = new BoggleResult() { Word = null };
+            BoggleResult two = new BoggleResult() { Word = null };
+            Assert.AreEqual(one, two);
+            Assert.AreEqual(two, one);
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_Equals_ReturnsFalse_WhenWordsNotEqual()
+        {
+            BoggleResult one = new BoggleResult() { Word = null };
+            BoggleResult two = new BoggleResult() { Word = "hi" };
+            Assert.AreNotEqual(one, two);
+            Assert.AreNotEqual(two, one);
+
+            one.Word = "bye";
+            Assert.AreNotEqual(one, two);
+            Assert.AreNotEqual(two, one);
+        }
     }
 }

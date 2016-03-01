@@ -32,9 +32,9 @@ namespace Boggle
             {
                 if (this.Coords.Count == other.Coords.Count)
                 {
-                    foreach (BoggleCoord coord in this.Coords)
+                    for(int i = 0; i < this.Coords.Count; i++)
                     {
-                        if (!other.Coords.Contains(coord))
+                        if (!other.Coords[i].Equals(this.Coords[i]))
                             return false;
                     }
                 }
