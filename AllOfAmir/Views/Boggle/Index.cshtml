@@ -4,6 +4,10 @@
 
 <h2>Boggle!?</h2>
 <button type="button" id="test-button" class="btn">Click to test</button>
+<hr/>
+
+<div id="board"></div>
+<div id="results"></div>
 
 @section scripts{ 
     <script type="text/javascript">
@@ -14,8 +18,32 @@
                 ['e', 'f', 'g', 'h'],
                 ['i', 'j', 'k', 'l'],
                 ['m', 'n', 'o', 'p']
-            ],
-            service_url = "@Url.Action("GetBoggleWords", "Boggle")";
+        ],
+            service_url = "@Url.Action("GetBoggleWords", "Boggle")",
+            $boardDiv = $("div#board"),
+            $resultsDiv = $("div#results");
+
+        /*
+         * this helper will render the given list of BoggleResult objects on this page
+         */
+        function renderBoggleResults(results) {
+            if (!results) return;
+
+            // first, remove all the previous results
+            $resultsDiv.empty();
+
+            // now rifle through the new results and toss-em up on the page
+            for (var i = 0, iLen = results.length; i < iLen; i++) {
+                var nextResult = results[i],
+                    nextCoords = nextResult.Coords,
+                    nextWord = nextResult.Word,
+                    $nextAnchor = $(document.createElement('a')).addClass("result-word")
+                                                                .data('result-word', nextResult)
+                                                                .text(nextWord)
+                                                                .append( document.createElement('br') )
+                                                                .appendTo($resultsDiv);
+            }
+        }
 
         $("#test-button").click(function () {
             $.post({
@@ -23,11 +51,61 @@
                 data: { board: board_model },
                 dataType: 'json',
                 success: function (data, textStatus, jqXHR) {
-                    alert('got success - TODO: please implement me');
+                    renderBoggleResults(data);
                 },
                 error: aoa.ajaxErrorHandler
             });
         });
+
+        /*
+         * helper that renders the given 2D board of characters on this page
+         */
+        function renderBoard(board) {
+            for (var i = 0; i < board.length; i++) {
+                var $boardRow = $(document.createElement("div")).addClass("board-row");
+                for (var j = 0; j < board[i].length; j++) {
+                    $(document.createElement("div")).attr("id", "" + i + "," + j)
+                                                    .addClass("board-cell")
+                                                    .text(board[i][j] + "")
+                                                    .appendTo($boardRow);
+                }
+
+                $boardRow.appendTo($boardDiv);
+            }
+        }// renderBoard
+
+
+        // any time the user hovers their mouse over a 'word' in the result
+        // div, we should highlight that word in the board
+        $resultsDiv.hover(function (e) {
+            var target = e.target;
+            if (!target) return;
+
+            var $target = $(target);
+
+            // if this isn't a result word that's being hovered on, we don't care
+            if (!$target.hasClass('result-word')) return;
+
+            // each result should have a BoggleResult in it's data cache.
+            // if it's not there, halt!
+            var targetData = $target.data('result-word');
+            if (!targetData) return;
+
+            // now that we've got the BoggleResult associated to the word
+            // that the user has hovered on, we need to highlight it in the
+            // board!  first, make sure nothing else is highlighted right now
+            $boardDiv.find(".board-cell-hover").removeClass("board-cell-hover");
+
+            // now iterate on this BoggleResult's coordinates and highlight
+            // the corresponding cells in the board/dom
+            for (var i = 0, iLen = targetData.Coords.length; i < iLen; i++) {
+                var nextCoord = targetData.Coords[i];
+                $boardDiv.find("div#" + nextCoord.Row + "," + nextCoord.Col).addClass("board-cell-hover");
+            }
+        });
+
+        // now render our board, so the user actually sees something!
+        renderBoard(board_model);
 
     })(jQuery, aoa, window, document);
     </script>

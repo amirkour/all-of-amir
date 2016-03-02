@@ -19,3 +19,14 @@
     margin: 20px 20px;
 }
 #global-error{display:none;}
+.board-row {
+}
+.board-cell {
+    display: inline-block;
+    width:20px;
+    height:20px;
+}
+.board-cell-hover{
+    background-color:red;
+}
+.result-word{}
