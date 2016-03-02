@@ -23,6 +23,19 @@
             $boardDiv = $("div#board"),
             $resultsDiv = $("div#results");
 
+        /* for testing only - this should go away eventually */
+        $("#test-button").click(function () {
+            $.post({
+                url: service_url,
+                data: { board: board_model },
+                dataType: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    renderBoggleResults(data);
+                },
+                error: aoa.ajaxErrorHandler
+            });
+        });
+
         /*
          * this helper will render the given list of BoggleResult objects on this page
          */
@@ -45,26 +58,14 @@
             }
         }
 
-        $("#test-button").click(function () {
-            $.post({
-                url: service_url,
-                data: { board: board_model },
-                dataType: 'json',
-                success: function (data, textStatus, jqXHR) {
-                    renderBoggleResults(data);
-                },
-                error: aoa.ajaxErrorHandler
-            });
-        });
-
         /*
-         * helper that renders the given 2D board of characters on this page
+         * helper that renders the given 2D board of characters to the page
          */
         function renderBoard(board) {
             for (var i = 0; i < board.length; i++) {
                 var $boardRow = $(document.createElement("div")).addClass("board-row");
                 for (var j = 0; j < board[i].length; j++) {
-                    $(document.createElement("div")).attr("id", "" + i + "," + j)
+                    $(document.createElement("div")).attr("id", "row" + i + "col" + j)
                                                     .addClass("board-cell")
                                                     .text(board[i][j] + "")
                                                     .appendTo($boardRow);
@@ -72,12 +73,20 @@
 
                 $boardRow.appendTo($boardDiv);
             }
-        }// renderBoard
+        }
 
+        /*
+         * helper that will clear all hovered/displayed words on the page
+         */
+        function clearAllHoverEffects() {
+            $boardDiv.find(".board-cell-hover").removeClass("board-cell-hover");
+        }
 
         // any time the user hovers their mouse over a 'word' in the result
-        // div, we should highlight that word in the board
-        $resultsDiv.hover(function (e) {
+        // list, we should highlight that word in the board.  just bind
+        // this listener to the parent div and catch only the targets we
+        // care about.
+        $resultsDiv.mouseover(function (e) {
             var target = e.target;
             if (!target) return;
 
@@ -94,14 +103,20 @@
             // now that we've got the BoggleResult associated to the word
             // that the user has hovered on, we need to highlight it in the
             // board!  first, make sure nothing else is highlighted right now
-            $boardDiv.find(".board-cell-hover").removeClass("board-cell-hover");
+            clearAllHoverEffects();
 
             // now iterate on this BoggleResult's coordinates and highlight
             // the corresponding cells in the board/dom
             for (var i = 0, iLen = targetData.Coords.length; i < iLen; i++) {
                 var nextCoord = targetData.Coords[i];
-                $boardDiv.find("div#" + nextCoord.Row + "," + nextCoord.Col).addClass("board-cell-hover");
+                $boardDiv.find("div#row" + nextCoord.Row + "col" + nextCoord.Col).addClass("board-cell-hover");
             }
+
+        }).mouseout(function (e) {
+
+            // and when the user's mouse exits the result list, just clear any 
+            // displayed results
+            clearAllHoverEffects();
         });
 
         // now render our board, so the user actually sees something!
