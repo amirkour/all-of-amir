@@ -173,5 +173,37 @@ namespace BoggleTest
             Assert.AreNotEqual(one, two);
             Assert.AreNotEqual(two, one);
         }
+
+        [TestMethod]
+        public void BoggleResultTest_AddLetterForNewResult_ReturnsNewResult()
+        {
+            BoggleResult original = new BoggleResult()
+            {
+                Word = "hell",
+                Coords = new List<BoggleCoord>()
+            };
+            original.Coords.Add(new BoggleCoord() { Row = 0, Col = 0 });
+
+            BoggleLetter letter = new BoggleLetter() { Row = 0, Col = 1, Letter = 'o' };
+
+            BoggleResult result = BoggleResult.AddLetterForNewResult(original, letter);
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Coords != null && result.Coords.Count == original.Coords.Count + 1);
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_AddLetterForNewResult_ThrowsException_IfEitherArgNull()
+        {
+            Exception e = null;
+            try { BoggleResult.AddLetterForNewResult(null, new BoggleLetter()); }
+            catch(Exception ex) { e = ex; }
+
+            Assert.IsNotNull(e);
+
+            e = null;
+            try { BoggleResult.AddLetterForNewResult(new BoggleResult(), null); }
+            catch (Exception ex) { e = ex; }
+            Assert.IsNotNull(e);
+        }
     }
 }

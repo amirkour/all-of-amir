@@ -18,6 +18,39 @@ namespace Boggle
         public string Word { get; set; }
         public List<BoggleCoord> Coords { get; set; }
 
+        /// <summary>
+        /// This is sort of a "concatenation" operation for BoggleResult objects - 
+        /// it takes a boggle result and a boggle letter and returns a new boggle
+        /// result: the product of appending the given letter to the end of the given
+        /// boggle result.
+        /// </summary>
+        public static BoggleResult AddLetterForNewResult(BoggleResult original, BoggleLetter letterToAdd)
+        {
+            if (original == null || letterToAdd == null)
+                throw new Exception("Cannot add a null letter to a null boggle result");
+
+            BoggleResult result = new BoggleResult() { Word = original.Word, Coords = new List<BoggleCoord>() };
+
+            // slap the new letter to the end of this result's word
+            result.Word = (result.Word == null) ? letterToAdd.Letter.ToString() : result.Word + letterToAdd.Letter;
+
+            // and then append the new letter's coordinates to the end of the
+            // result's list
+            if(!original.Coords.IsNullOrEmpty())
+            {
+                foreach (BoggleCoord coord in original.Coords)
+                    result.Coords.Add(coord);
+            }
+
+            result.Coords.Add(new BoggleCoord()
+            {
+                Row = letterToAdd.Row,
+                Col = letterToAdd.Col
+            });
+
+            return result;
+        }
+
         public override bool Equals(object obj)
         {
             BoggleResult other = obj as BoggleResult;
