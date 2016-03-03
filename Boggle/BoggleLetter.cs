@@ -10,6 +10,7 @@ namespace Boggle
     /// A BoggleLetter is just a BoggleCoord (a row/col tuple) and a letter.
     /// Conceptually: it's a letter on a boggle board!
     /// </summary>
+    [Serializable]
     public class BoggleLetter : BoggleCoord
     {
         public char Letter { get; set; }
