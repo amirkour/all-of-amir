@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DotNetUtils;
 using Boggle;
@@ -306,6 +307,85 @@ namespace BoggleTest
             Assert.IsTrue(neighbors.Exists(c => c.Row == 2 && c.Col == 0));
             Assert.IsTrue(neighbors.Exists(c => c.Row == 2 && c.Col == 1));
             Assert.IsTrue(neighbors.Exists(c => c.Row == 2 && c.Col == 2));
+        }
+
+        [TestMethod]
+        public void BoggleBoardHelperTest_GetAllWordsStartingAt_ReturnsNull_ForNullCoords()
+        {
+            char[][] board = GenerateTestBoard();
+            BoggleBoardHelper helper = new BoggleBoardHelper(board);
+            Assert.IsNull(helper.GetAllWordsStartingAt(null, false, false));
+        }
+
+        [TestMethod]
+        public void BoggleBoardHelperTest_GetAllWordsStartingAt_ReturnsNull_ForInvalidCoords()
+        {
+            char[][] board = GenerateTestBoard(1, 1);
+            BoggleBoardHelper helper = new BoggleBoardHelper(board);
+            Assert.IsNull(helper.GetAllWordsStartingAt(new BoggleCoord() { Row = 123, Col = 123 }, false, false));
+        }
+
+        [TestMethod]
+        public void BoggleBoardHelperTest_GetAllWordsStartingAt_TestOne()
+        {
+            // let's start simple - a 2x2 board with the word "hell" starting at 0,0
+            char[][] board = new char[2][];
+            board[0] = new char[] { 'h', 'e' };
+            board[1] = new char[] { 'l', 'l' };
+
+            BoggleBoardHelper helper = new BoggleBoardHelper(board);
+            List<BoggleResult> results = helper.GetAllWordsStartingAt(new BoggleCoord() { Row = 0, Col = 0 }, false, true);
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results.Count >= 1);
+
+            BoggleResult hell = results.First(re => re.Word != null && re.Word.Equals("hell"));
+            Assert.IsNotNull(hell);
+            Assert.IsNotNull(hell.Coords);
+            Assert.AreEqual(hell.Coords.Count, 4);
+        }
+
+        [TestMethod]
+        public void BoggleBoardHelperTest_GetAllWordsStartingAt_TestTwo()
+        {
+            // exactly the same as TestOne, but position the word somewhere else in the board
+            // and spell it backwards
+            char[][] board = new char[2][];
+            board[0] = new char[] { 'l', 'e' };
+            board[1] = new char[] { 'l', 'h' };
+
+            BoggleBoardHelper helper = new BoggleBoardHelper(board);
+            List<BoggleResult> results = helper.GetAllWordsStartingAt(new BoggleCoord() { Row = 1, Col = 1 }, false, true);
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results.Count >= 1);
+
+            BoggleResult hell = results.First(re => re.Word != null && re.Word.Equals("hell"));
+            Assert.IsNotNull(hell);
+            Assert.IsNotNull(hell.Coords);
+            Assert.AreEqual(hell.Coords.Count, 4);
+        }
+
+        [TestMethod]
+        public void BoggleBoardHelperTest_GetAllWordsStartingAt_TestThree()
+        {
+            // let's try an actual game board - i got this one online.
+            // the word 'super' starts at 1,3 but it includes diagonals,
+            // so let's see if we can pick it up
+            char[][] board = new char[4][];
+            board[0] = new char[] { 'd', 'g', 'h', 'i' };
+            board[1] = new char[] { 'k', 'l', 'p', 's' };
+            board[2] = new char[] { 'y', 'e', 'u', 't' };
+            board[3] = new char[] { 'e', 'o', 'r', 'n' };
+
+            BoggleBoardHelper helper = new BoggleBoardHelper(board);
+            List<BoggleResult> results = helper.GetAllWordsStartingAt(new BoggleCoord() { Row = 1, Col = 3 }, true, true);
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results.Count >= 1);
+
+            BoggleResult super = results.Find(re => re.Word != null && re.Word.Equals("super"));
+            Assert.IsNotNull(super);
+            Assert.IsNotNull(super.Coords);
+            Assert.AreEqual(super.Word, "super");
+            Assert.AreEqual(super.Coords.Count, 5);
         }
     }
 }
