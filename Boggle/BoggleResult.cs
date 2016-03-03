@@ -51,6 +51,18 @@ namespace Boggle
             return result;
         }
 
+        /// <summary>
+        /// Helper that returns true if this BoggleResult's coordinate list
+        /// contains the given coord, false otherwise.
+        /// </summary>
+        public bool ContainsCoord(BoggleCoord coord)
+        {
+            if (coord == null || this.Coords.IsNullOrEmpty())
+                return false;
+
+            return this.Coords.Exists(next => next.Col == coord.Col && next.Row == coord.Row);
+        }
+
         public override bool Equals(object obj)
         {
             BoggleResult other = obj as BoggleResult;

@@ -205,5 +205,54 @@ namespace BoggleTest
             catch (Exception ex) { e = ex; }
             Assert.IsNotNull(e);
         }
+
+        [TestMethod]
+        public void BoggleResultTest_ContainsCoord_ReturnsTrue_WhenCoordIsInList()
+        {
+            BoggleResult result = new BoggleResult() { Coords = new List<BoggleCoord>() };
+            result.Coords.Add(new BoggleCoord()
+            {
+                Row = 123,
+                Col = 234
+            });
+
+            BoggleCoord toCheck = new BoggleCoord()
+            {
+                Row = 123,
+                Col = 234
+            };
+
+            Assert.IsTrue(result.ContainsCoord(toCheck));
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_ContainsCoord_ReturnsFalse_WhenCoordListIsNull()
+        {
+            BoggleResult result = new BoggleResult() { Coords = null };
+
+            BoggleCoord coord = new BoggleCoord() { Row = 34354, Col = 3453646 };
+            Assert.IsFalse(result.ContainsCoord(coord));
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_ContainsCoord_ReturnsFalse_WhenArgIsNull()
+        {
+            BoggleResult result = new BoggleResult() { Coords = new List<BoggleCoord>() };
+            Assert.IsFalse(result.ContainsCoord(null));
+        }
+
+        [TestMethod]
+        public void BoggleResultTest_ContainsCoord_ReturnsFalse_WhenCoordNotPresent()
+        {
+            BoggleResult result = new BoggleResult() { Coords = new List<BoggleCoord>() };
+            result.Coords.Add(new BoggleCoord()
+            {
+                Row = 123,
+                Col = 123123
+            });
+
+            BoggleCoord coord = new BoggleCoord() { Row = 34354, Col = 3453646 };
+            Assert.IsFalse(result.ContainsCoord(coord));
+        }
     }
 }
