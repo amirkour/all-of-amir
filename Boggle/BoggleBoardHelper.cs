@@ -178,6 +178,32 @@ namespace Boggle
         }
 
         /// <summary>
+        /// Get all words for the current board.
+        /// 
+        /// For now, the resulting list is sorted by word length, smallest first.
+        /// </summary>
+        public List<BoggleResult> GetAllWords(bool allowDiagonalsForNeighbors, bool excludeSingleLetterWords)
+        {
+            if (_board.IsNullOrEmpty())
+                throw new Exception("Cannot find words in the absence of a boggle board - did you somehow corrupt the game board?");
+
+            List<BoggleResult> masterList = new List<BoggleResult>();
+            List<BoggleResult> currentResults = null;
+            for(int i = 0; i < _board.Length; i++)
+            {
+                for(int j = 0; j < _board[i].Length; j++)
+                {
+                    currentResults = this.GetAllWordsStartingAt(new BoggleCoord() { Row = i, Col = j }, allowDiagonalsForNeighbors, excludeSingleLetterWords);
+                    if(!currentResults.IsNullOrEmpty())
+                        currentResults.ForEach(result => masterList.Add(result));
+                }
+            }
+
+            masterList.Sort(new BoggleResultComparer());
+            return masterList;
+        }
+
+        /// <summary>
         /// Get all valid English words for the current board, starting at the given coordinates.
         /// 
         /// Returns null for out-of-bounds or null coordinates.
@@ -268,6 +294,27 @@ namespace Boggle
             
             if (_dictionaryService.IsExactWord(resultSoFar.Word))
                 completedResults.Add(resultSoFar);
+        }
+    }
+
+    /// <summary>
+    /// Implementation of IComparer<BoggleResult> which will compare two BoggleResult
+    /// objects by their word length, considering shorter words smaller.
+    /// </summary>
+    internal class BoggleResultComparer : IComparer<BoggleResult>
+    {
+        public int Compare(BoggleResult one, BoggleResult two)
+        {
+            // sort nulls backwards
+            if (one == null && two == null) return 0;
+            if (one == null && two != null) return 1;  // one is bigger - null sorts to back
+            if (one != null && two == null) return -1; // two is bigger - null sorts to back
+
+            if (one.Word == null && two.Word == null) return 0;
+            if (one.Word == null && two.Word != null) return 1;
+            if (one.Word != null && two.Word == null) return -1;
+
+            return one.Word.CompareTo(two.Word);
         }
     }
 }
