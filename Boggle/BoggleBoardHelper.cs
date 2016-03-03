@@ -233,19 +233,15 @@ namespace Boggle
                 // before halting, ensure this isn't an exact word - don't wanna miss it
                 if (excludeSingleLetterWords && resultSoFar.Word.Length == 0)
                     return;
-                else if(_dictionaryService.IsExactWord(resultSoFar.Word))
+
+                if (_dictionaryService.IsExactWord(resultSoFar.Word))
                     completedResults.Add(resultSoFar);
-                else
-                    return;
+
+                return;
             }
 
             // ok - let's pickup where we leftoff while building this word:
             BoggleCoord lastCoord = resultSoFar.Coords.Last();
-
-            // we're gonna recurse through the neighbors, but we don't wanna back-track,
-            // to a letter that we already came from in the sequence, so pickup the 2nd-
-            // to-last coordinate as well (if it's there.)
-            BoggleCoord secondToLastCoord = (resultSoFar.Coords.Count > 1) ? resultSoFar.Coords[resultSoFar.Coords.Count - 2] : null;
 
             List<BoggleLetter> neighbors = this.GetNeighborsAt(lastCoord, useDiagonalsForNeighbors);
             if (neighbors.IsNullOrEmpty())
@@ -254,10 +250,9 @@ namespace Boggle
             foreach(BoggleLetter nextNeighbor in neighbors)
             {
                 // if this neighbor has already been seen, don't go back
-                // TODO - does equality work here?
-                if (secondToLastCoord != null && secondToLastCoord.Equals(nextNeighbor))
+                if (resultSoFar.ContainsCoord(nextNeighbor))
                     continue;
-
+                
                 // and then recurse down to the next neighbor so we can continue
                 this.GetWordHelper(BoggleResult.AddLetterForNewResult(resultSoFar, nextNeighbor),
                                    completedResults,
