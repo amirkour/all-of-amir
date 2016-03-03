@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoggleBoardHelper.cs" />
     <Compile Include="BoggleCoord.cs" />
     <Compile Include="BoggleLetter.cs" />
     <Compile Include="BoggleResult.cs" />
