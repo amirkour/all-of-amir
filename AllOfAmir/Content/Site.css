@@ -22,11 +22,26 @@
 .board-row {
 }
 .board-cell {
+    width: 70px;
+    height: 70px;
+    background-color: #80dfff;
+    border: 1px solid #4dd2ff;
+    border-radius: 20px;
+    text-align: center;
     display: inline-block;
-    width:20px;
-    height:20px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-bottom: 10px;
 }
-.board-cell-hover{
-    background-color:red;
+.board-cell:first-child {
+    margin-left: 0;
 }
+.board-cell:hover, .board-cell-hover {
+    -webkit-box-shadow: 0px 0px 5px 10px #d0d0e1;
+    -moz-box-shadow: 0px 0px 5px 10px #d0d0e1;
+    box-shadow: 0px 0px 5px 10px #d0d0e1;
+}
+
 .result-word{}
