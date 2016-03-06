@@ -2,9 +2,11 @@
     padding-top: 50px;
     padding-bottom: 20px;
 }
-
 #all-of-amir{
     background: url('/img/all of amir-01.png') no-repeat right top;
+}
+#loading-dialog{
+    display:none;
 }
 #left ul{
     list-style:none;
@@ -44,4 +46,6 @@
     box-shadow: 0px 0px 5px 10px #d0d0e1;
 }
 
-.result-word{}
+.result-word{
+    cursor:pointer;
+}

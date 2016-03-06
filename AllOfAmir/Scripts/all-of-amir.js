@@ -14,6 +14,11 @@
     // the layout page should have a 'global' error alert we can use
     // to 'pretty-print' generic runtime errors.
     var $globalError = $('#global-error'),
+        $loadingDialog = $("div#loading-dialog").modal({
+            show: false,
+            keyboard: false,
+            backdrop: 'static'
+        }),
 
         // all our ajax posts should include the csrf anti-forgery token,
         // which can be included by MVC if you use @Html.AntiForgeryToken
@@ -46,6 +51,18 @@
     // here's our global aoa namespace - it'll get exposed to the rest of the page
     // at the bottom of this file
     var aoa = {
+
+        /*
+         * this helper will display a loading dialog on the page and prevent
+         * user input from being accepted until it's hidden again.
+         * the dialog is courtesy of bootstrap.
+         */
+        loading: function(loading){
+            if (typeof loading === 'undefined' || loading === true)
+                $loadingDialog.modal('show');
+            else
+                $loadingDialog.modal('hide');
+        },
 
         /*
          * error handler for ajax requests - expects the given jqXHR

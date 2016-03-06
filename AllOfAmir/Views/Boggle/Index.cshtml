@@ -25,12 +25,14 @@
 
         /* for testing only - this should go away eventually */
         $("#test-button").click(function () {
+            aoa.loading();
             $.post({
                 url: service_url,
                 data: { board: board_model },
                 dataType: 'json',
                 success: function (data, textStatus, jqXHR) {
                     renderBoggleResults(data);
+                    aoa.loading(false);
                 },
                 error: aoa.ajaxErrorHandler
             });

@@ -314,7 +314,11 @@ namespace Boggle
             if (one.Word == null && two.Word != null) return 1;
             if (one.Word != null && two.Word == null) return -1;
 
-            return one.Word.CompareTo(two.Word);
+            if (one.Word.Length < two.Word.Length)
+                return -1;
+            else if (one.Word.Length == two.Word.Length)
+                return 0;
+            else return 1;
         }
     }
 }

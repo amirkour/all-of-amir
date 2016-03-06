@@ -8,6 +8,20 @@
 
 </head>
 <body>
+    @* loading dialog - purposely outside all other page content, per bootstrap's recomendation! *@
+    <div id="loading-dialog" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p style="text-align:center;"><em style="font-weight:bolder;">Loading ...</em></p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
 
         <div id="global-error" class="alert alert-danger"></div>
