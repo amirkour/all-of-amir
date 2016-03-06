@@ -29,7 +29,7 @@ namespace Boggle
         {
             if (board == null) throw new Exception("A boggle board helper cannot be instantiated without a non-null 2D board of chars");
             _board = board;
-            _dictionaryService = new AADSvc();
+            _dictionaryService = new HunspellWordDefiner();
         }
 
         /// <summary>
@@ -194,6 +194,7 @@ namespace Boggle
             {
                 for(int j = 0; j < _board[i].Length; j++)
                 {
+                    System.Diagnostics.Trace.TraceInformation("getting everything at " + _board[i][j]);
                     currentResults = this.GetAllWordsStartingAt(new BoggleCoord() { Row = i, Col = j }, allowDiagonalsForNeighbors, excludeSingleLetterWords);
                     if(!currentResults.IsNullOrEmpty())
                         currentResults.ForEach(result => masterList.Add(result));
