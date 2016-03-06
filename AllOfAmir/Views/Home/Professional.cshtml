@@ -2,4 +2,12 @@
     ViewBag.Title = "Professional";
 }
 
+@section breadcrumbs
+{
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li class="active">Professional</li>
+</ol>
+}
+
 <a href="@Url.Action("Index","Boggle")">Boggle Solver</a>

@@ -1,6 +1,14 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
+@section breadcrumbs
+{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="@Url.Action("Professional", "Home")">Professional</a></li>
+        <li class="active">Boggle</li>
+    </ol>
+}
 
 <h2>Boggle!?</h2>
 <button type="button" id="test-button" class="btn">Click to test</button>
