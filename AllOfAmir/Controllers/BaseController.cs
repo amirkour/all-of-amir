@@ -13,10 +13,49 @@ namespace AllOfAmir.Controllers
     /// </summary>
     public abstract class BaseController : Controller
     {
+        /// <summary>
+        /// Helper to get custom/pretty exception strings for error reporting
+        /// </summary>
+        protected string BuildPrettyExceptionString(Exception e)
+        {
+            StringBuilder bldr = new StringBuilder();
+            if (e == null)
+                bldr.Append("No exception provided");
+            else
+            {
+                if (e.Message.IsNullOrEmpty())
+                    bldr.Append("No exception message provided");
+                else
+                    bldr.Append(e.Message);
+
+                if (!e.StackTrace.IsNullOrEmpty())
+                    bldr.Append(" - " + e.StackTrace);
+            }
+
+            return bldr.ToString();
+        }
+
         protected void Info(string msg) { System.Diagnostics.Trace.TraceInformation(msg); }
         protected void Info(string msg, params object[] args) { System.Diagnostics.Trace.TraceInformation(msg, args); }
         protected void Warn(string msg) { System.Diagnostics.Trace.TraceWarning(msg); }
         protected void Warn(string msg, params object[] args) { System.Diagnostics.Trace.TraceWarning(msg, args); }
+        protected void Warn(string msg, Exception e)
+        {
+            StringBuilder bldr = new StringBuilder();
+            if (msg.IsNullOrEmpty())
+                bldr.Append("No warning message provided");
+            else
+                bldr.Append(msg);
+
+            string prettyException = BuildPrettyExceptionString(e);
+            if (prettyException.IsNullOrEmpty())
+                bldr.Append(" - no exception provided");
+            else
+                bldr.Append(" - " + prettyException);
+
+            System.Diagnostics.Trace.TraceWarning(bldr.ToString());
+        }
+
         protected void Error(string msg) { System.Diagnostics.Trace.TraceError(msg); }
         protected void Error(string msg, object[] args) { System.Diagnostics.Trace.TraceError(msg, args); }
         protected void Error(string msg, Exception e)
@@ -27,18 +66,11 @@ namespace AllOfAmir.Controllers
             else
                 bldr.Append(msg);
 
-            if (e == null)
+            string prettyException = BuildPrettyExceptionString(e);
+            if (prettyException.IsNullOrEmpty())
                 bldr.Append(" - no exception provided");
             else
-            {
-                if (e.Message.IsNullOrEmpty())
-                    bldr.Append(" - no exception message provided");
-                else
-                    bldr.Append(" - " + e.Message);
-
-                if (!e.StackTrace.IsNullOrEmpty())
-                    bldr.Append(" - " + e.StackTrace);
-            }
+                bldr.Append(" - " + prettyException);
 
             System.Diagnostics.Trace.TraceError(bldr.ToString());
         }
@@ -63,6 +95,12 @@ namespace AllOfAmir.Controllers
         /// </summary>
         protected override void OnException(ExceptionContext filterContext)
         {
+            if (filterContext.ExceptionHandled)
+            {
+                Warn("We almost handled an exception, but it looks like someone else already got to it!?  Passing it by", filterContext.Exception);
+                return;
+            }
+
             // this method had better not throw ANOTHER exception ... 
             // ... if it does, we gotta handle it
             try
@@ -72,10 +110,11 @@ namespace AllOfAmir.Controllers
                     string msg = filterContext.Exception != null && !filterContext.Exception.Message.IsNullOrEmpty() ?
                         filterContext.Exception.Message :
                         "An unspecified error was encountered";
-                    JsonResult json = this.Json(new { Error = msg });
+                    //JsonResult json = this.Json(new { Error = msg });
 
-                    Response.Write(this.Stringify(json));
+                    //Response.Write(this.Stringify(json));
                     Response.StatusCode = 500;
+                    filterContext.Result = this.Json(new { Error = msg });
 
                     filterContext.ExceptionHandled = true;
                     Error("We handled the following exception", filterContext.Exception);
