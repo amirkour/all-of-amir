@@ -10,7 +10,8 @@ namespace AllOfAmir
         {
             bundles.Add(new ScriptBundle("~/bundles/scripts")
                    .Include("~/Scripts/jquery-{version}.js")
-                   .Include("~/Scripts/bootstrap.js"));
+                   .Include("~/Scripts/bootstrap.js")
+                   .Include("~/Scripts/all-of-amir.js"));
             
             bundles.Add(new StyleBundle("~/bundles/styles")
                    .Include("~/Content/bootstrap.css")
