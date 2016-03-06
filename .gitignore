@@ -13,3 +13,11 @@ App_Data/
 msbuild.log
 _app/
 nuget.exe
+
+# this subfolder holds user-specific publishing metadata - don't check them in
+PublishProfiles/
+
+*.log
+*.log.*
+
+applicationhost.config

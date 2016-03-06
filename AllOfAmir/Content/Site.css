@@ -2,9 +2,11 @@
     padding-top: 50px;
     padding-bottom: 20px;
 }
-
 #all-of-amir{
     background: url('/img/all of amir-01.png') no-repeat right top;
+}
+#loading-dialog{
+    display:none;
 }
 #left ul{
     list-style:none;
@@ -17,4 +19,33 @@
     width:200px;
     padding:20px 20px;
     margin: 20px 20px;
+}
+#global-error{display:none;}
+.board-row {
+}
+.board-cell {
+    width: 70px;
+    height: 70px;
+    background-color: #80dfff;
+    border: 1px solid #4dd2ff;
+    border-radius: 20px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    color: #fff;
+    font-size: 20px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.board-cell:first-child {
+    margin-left: 0;
+}
+.board-cell:hover, .board-cell-hover {
+    -webkit-box-shadow: 0px 0px 5px 10px #d0d0e1;
+    -moz-box-shadow: 0px 0px 5px 10px #d0d0e1;
+    box-shadow: 0px 0px 5px 10px #d0d0e1;
+}
+
+.result-word{
+    cursor:pointer;
 }

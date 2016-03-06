@@ -167,6 +167,8 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BoggleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -188,6 +190,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="img\all of amir-01.png" />
+    <Content Include="log4net.config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\all-of-amir.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
@@ -215,6 +221,17 @@
     <None Include="Project_Readme.html" />
     <Content Include="Views\Home\Personal.cshtml" />
     <Content Include="Views\Home\Professional.cshtml" />
+    <Content Include="Views\Boggle\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Boggle\Boggle.csproj">
+      <Project>{85f707f3-1dc8-4d58-87d1-226371cb0771}</Project>
+      <Name>Boggle</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
+      <Project>{7735820b-ac15-4a64-a820-5b0b382abefd}</Project>
+      <Name>DotNetUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
