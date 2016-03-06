@@ -44,6 +44,8 @@
                 error: aoa.ajaxErrorHandler
             }).done(function () {
                 aoa.loading(false);
+            }).fail(function () {
+                aoa.loading(false);
             });
         });
 
