@@ -36,5 +36,14 @@ namespace DotNetUtils
 
             return false;
         }
+
+        /// <summary>
+        /// Helper that returns true if the given request is for the homepage,
+        /// false otherwise (simply based on the request path.)
+        /// </summary>
+        public static bool IsForHompage(this HttpRequestBase request)
+        {
+            return request.Path != null && (request.Path == "" || request.Path == "/");
+        }
     }
 }
