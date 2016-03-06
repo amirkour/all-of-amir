@@ -55,6 +55,10 @@
       <Project>{c6bbd107-0198-4ef4-8040-86c81ffb9be2}</Project>
       <Name>AonAwareDictionary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DictionaryUtils\DictionaryUtils.csproj">
+      <Project>{a6ce42c4-f7f2-4b3b-bfe4-f0a831577eb3}</Project>
+      <Name>DictionaryUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
       <Project>{7735820b-ac15-4a64-a820-5b0b382abefd}</Project>
       <Name>DotNetUtils</Name>

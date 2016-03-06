@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DictionaryUtils;
 using DotNetUtils;
 using AonAwareDictionary;
 
@@ -15,7 +16,7 @@ namespace Boggle
     public class BoggleBoardHelper
     {
         protected char[][] _board;
-        protected AADSvc _dictionaryService;
+        protected IWordDefiner _dictionaryService;
 
         // default construction isn't allowed, since this class is meaningless
         // without a 2D array of chars
