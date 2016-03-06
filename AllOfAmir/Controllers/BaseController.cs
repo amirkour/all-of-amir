@@ -95,11 +95,11 @@ namespace AllOfAmir.Controllers
         /// </summary>
         protected override void OnException(ExceptionContext filterContext)
         {
-            if (filterContext.ExceptionHandled)
-            {
-                Warn("We almost handled an exception, but it looks like someone else already got to it!?  Passing it by", filterContext.Exception);
-                return;
-            }
+            //if (filterContext.ExceptionHandled)
+            //{
+            //    Warn("We almost handled an exception, but it looks like someone else already got to it!?  Passing it by", filterContext.Exception);
+            //    return;
+            //}
 
             // this method had better not throw ANOTHER exception ... 
             // ... if it does, we gotta handle it
@@ -110,13 +110,21 @@ namespace AllOfAmir.Controllers
                     string msg = filterContext.Exception != null && !filterContext.Exception.Message.IsNullOrEmpty() ?
                         filterContext.Exception.Message :
                         "An unspecified error was encountered";
+
                     //JsonResult json = this.Json(new { Error = msg });
-
                     //Response.Write(this.Stringify(json));
-                    Response.StatusCode = 500;
-                    filterContext.Result = this.Json(new { Error = msg });
 
+                    Response.Clear();
+                    Response.StatusCode = 500;
+                    Response.TrySkipIisCustomErrors = true;
+                    filterContext.Result = this.Json(new { Error = msg });
                     filterContext.ExceptionHandled = true;
+
+                    // DO I NEED THESE? I DON'T THINK SO ...
+                    //filterContext.HttpContext.Response.StatusCode = 500;
+                    //filterContext.HttpContext.Response.Clear();
+                    //filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+
                     Error("We handled the following exception", filterContext.Exception);
                     return;
                 }
