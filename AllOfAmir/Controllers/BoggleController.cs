@@ -63,8 +63,8 @@ namespace AllOfAmir.Controllers
             Info("{0}", this.Request.PhysicalApplicationPath);
             Info("{0}", this.Request.PhysicalPath);
 
-            string affFilePath = Path.Combine(this.Request.PhysicalApplicationPath, "bin\\en_US.aff");
-            string dicFilePath = Path.Combine(this.Request.PhysicalApplicationPath, "bin\\en_US.dic");
+            string affFilePath = Path.Combine(this.Request.PhysicalApplicationPath, "en_US.aff");
+            string dicFilePath = Path.Combine(this.Request.PhysicalApplicationPath, "en_US.dic");
             IWordDefiner injectedWordDefiner = new HunspellWordDefiner(affFilePath, dicFilePath);
 
             BoggleBoardHelper helper = new BoggleBoardHelper(board, injectedWordDefiner);
