@@ -32,6 +32,15 @@ namespace Boggle
             _dictionaryService = new HunspellWordDefiner();
         }
 
+        public BoggleBoardHelper(char[][] board, IWordDefiner wordDefiner)
+        {
+            if (board == null) throw new Exception("A boggle board helper cannot be instantiated without a non-null 2D board of chars");
+            if (wordDefiner == null) throw new Exception("A boggle board helper cannot be instantiated without a non-null word definer implementation");
+
+            _board = board;
+            _dictionaryService = wordDefiner;
+        }
+
         /// <summary>
         /// This helper returns true if the given coordinates are in-bounds for the
         /// board in this class, false otherwise.

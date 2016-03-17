@@ -228,6 +228,10 @@
       <Project>{85f707f3-1dc8-4d58-87d1-226371cb0771}</Project>
       <Name>Boggle</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DictionaryUtils\DictionaryUtils.csproj">
+      <Project>{a6ce42c4-f7f2-4b3b-bfe4-f0a831577eb3}</Project>
+      <Name>DictionaryUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
       <Project>{7735820b-ac15-4a64-a820-5b0b382abefd}</Project>
       <Name>DotNetUtils</Name>
@@ -268,6 +272,9 @@
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)..\3rd party libs\Hunspell\*.*" "$(TargetDir)" /Y /E</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

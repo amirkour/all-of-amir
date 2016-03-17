@@ -15,9 +15,22 @@ namespace DictionaryUtils
         public const string LANGUAGE_AFF_FILENAME_EN_US = "en_us.aff";
         public const string LANGUAGE_DIC_FILENAME_EN_US = "en_us.dic";
 
+        protected string _affFilepath;
+        protected string _dicFilepath;
+
         public HunspellWordDefiner()
         {
-            _hunspellDictionary = new Hunspell(LANGUAGE_AFF_FILENAME_EN_US, LANGUAGE_DIC_FILENAME_EN_US);
+            _affFilepath = LANGUAGE_AFF_FILENAME_EN_US;
+            _dicFilepath = LANGUAGE_DIC_FILENAME_EN_US;
+            _hunspellDictionary = new Hunspell(_affFilepath, _dicFilepath);
+        }
+        public HunspellWordDefiner(string affFilePath, string dicFilePath)
+        {
+            if (affFilePath.IsNullOrEmpty()) throw new Exception("Cannot initialize hunspell word definer without file path to aff file");
+            if (dicFilePath.IsNullOrEmpty()) throw new Exception("Cannot initialize hunspell word definer without file path to dic file");
+            _affFilepath = affFilePath;
+            _dicFilepath = dicFilePath;
+            _hunspellDictionary = new Hunspell(_affFilepath, _dicFilepath);
         }
 
         /// <summary>
