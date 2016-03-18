@@ -70,11 +70,21 @@
 
         /* for testing only - this should go away eventually */
         $("#solve-button").click(function () {
-            throw "not implemented!?";
+            if (!boardInputsAreComplete()) {
+                aoa.showError("All inputs must be filled out!");
+                return;
+            }
+
+            var boardModel = getArrayOfBoardCharacters();
+            if (!boardModel) {
+                aoa.showError("There was an error retrieving your board characters ... please ensure they are filled out and try again");
+                return;
+            }
+
             aoa.loading();
             $.post({
                 url: service_url,
-                data: { board: test_board },
+                data: { board: boardModel },
                 dataType: 'json',
                 success: function (data, textStatus, jqXHR) {
                     renderBoggleResults(data);
@@ -192,6 +202,55 @@
             }
 
             return false;
+        }
+
+        /*
+         * this helper returns true if the current boggle board has
+         * a valid letter/input present in every one of it's cells,
+         * false otherwise
+         */
+        function boardInputsAreComplete() {
+            var result = true;
+            $boardDiv.find(".board-cell").each(function (index) {
+                // 'this' is the current board cell dom element
+                var $textbox = $(this).find("." + boardCellInputClassname);
+                if (!isValidBoggleCellLetter($textbox.val())) {
+                    result = false;
+                    return false;
+                }
+            });
+
+            return result;
+        }
+
+        /*
+         * helper that converts the contents of the board into a 2d array
+         * of characters - returns this array if all inputs are filled out,
+         * or null if the inputs aren't filled out
+         */
+        function getArrayOfBoardCharacters() {
+            var boardSize = parseInt($boardSizeSelector.val()),
+                array = [],
+                $cells = $boardDiv.find(".board-cell"),
+                nextRow = [],
+                textboxClass = "." + boardCellInputClassname;
+
+            $cells.each(function (i) {
+
+                // if this board cell is a new row, push the previous row to the list
+                // of results and start the 'next row' array over again
+                if (i % boardSize == 0 && nextRow.length > 0) {
+                    array.push(nextRow);
+                    nextRow = [];
+                }
+
+                nextRow.push( $(this).find(textboxClass).val() );
+            });
+
+            // the last row has to get pushed to the results
+            if (nextRow.length > 0) array.push(nextRow);
+
+            return array;
         }
 
         // any time the user hovers their mouse over a 'word' in the result
