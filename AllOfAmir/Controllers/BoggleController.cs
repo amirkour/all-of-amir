@@ -56,12 +56,6 @@ namespace AllOfAmir.Controllers
         public JsonResult GetBoggleWords(char[][] board)
         {
             Info("GetBoggleWords service: {0}", Stringify(board));
-            Info("File system path: '{0}'", this.Request.PhysicalPath);
-            Info("{0}", this.Request.Path);
-            Info("{0}", this.Request.Url.LocalPath);
-            Info("{0}", this.HttpContext.Server.MapPath("/"));
-            Info("{0}", this.Request.PhysicalApplicationPath);
-            Info("{0}", this.Request.PhysicalPath);
 
             string affFilePath = Path.Combine(this.Request.PhysicalApplicationPath, "en_US.aff");
             string dicFilePath = Path.Combine(this.Request.PhysicalApplicationPath, "en_US.dic");
