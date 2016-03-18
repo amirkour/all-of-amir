@@ -18,9 +18,9 @@
     <div class="col-sm-6">
         <div>
             <select class="form-control" id="board-size-selector">
-                <option value="2" selected>2x2</option>
+                <option value="3" selected>3x3</option>
                 <option value="4">4x4</option>
-                <option value="6">6x6</option>
+                <option value="5">5x5</option>
             </select>
         </div>
         <div id="board"></div>
@@ -35,22 +35,35 @@
     <script type="text/javascript">
     (function ($, aoa, window, document, undefined) {
 
-        var board_model = [
-                ['d', 'g', 'h', 'i'],
-                ['k', 'l', 'p', 's'],
-                ['y', 'e', 'u', 't'],
-                ['e', 'o', 'r', 'n']
+        var test_board = [
+                ['d', 'g', 'h', 'i', 'a'],
+                ['k', 'l', 'p', 's', 'b'],
+                ['y', 'e', 'u', 't', 'c'],
+                ['e', 'o', 'r', 'n', 'd'],
+                ['a', 'a', 'a', 'a', 'a']
         ],
+            validLetters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
             service_url = "@Url.Action("GetBoggleWords", "Boggle")",
             $boardDiv = $("div#board"),
-            $resultsDiv = $("div#results");
+            $resultsDiv = $("div#results"),
+            $boardSizeSelector = $("#board-size-selector"),
+            boardCellInputClassname = "board-cell-input";
+
+        /* when user selects a new board size, update the UI - gotta hide any
+         * currently showing results in addition to changing board layout */
+        $boardSizeSelector.change(function (e) {
+            var selectedValue = e.target.value;
+            clearAllResults();
+            renderBoard(parseInt(selectedValue));
+        });
 
         /* for testing only - this should go away eventually */
         $("#solve-button").click(function () {
+            throw "not implemented!?";
             aoa.loading();
             $.post({
                 url: service_url,
-                data: { board: board_model },
+                data: { board: test_board },
                 dataType: 'json',
                 success: function (data, textStatus, jqXHR) {
                     renderBoggleResults(data);
@@ -64,13 +77,20 @@
         });
 
         /*
+         * helper that clears all/any results currently being displayed
+         */
+        function clearAllResults() {
+            $resultsDiv.empty();
+        }
+
+        /*
          * this helper will render the given list of BoggleResult objects on this page
          */
         function renderBoggleResults(results) {
             if (!results) return;
 
             // first, remove all the previous results
-            $resultsDiv.empty();
+            clearAllResults();
 
             // now rifle through the new results and toss-em up on the page
             for (var i = 0, iLen = results.length; i < iLen; i++) {
@@ -88,13 +108,21 @@
         /*
          * helper that renders the given 2D board of characters to the page
          */
-        function renderBoard(board) {
-            for (var i = 0; i < board.length; i++) {
+        function renderBoard(boardWidthAndHeight) {
+            if (typeof boardWidthAndHeight !== 'number') throw "Cannot render a board without a number";
+            if (boardWidthAndHeight <= 0) throw "Cannot render a board with a non-positive dimension";
+
+            $boardDiv.empty();
+            for (var i = 0; i < boardWidthAndHeight; i++) {
                 var $boardRow = $(document.createElement("div")).addClass("board-row");
-                for (var j = 0; j < board[i].length; j++) {
+                for (var j = 0; j < boardWidthAndHeight; j++) {
+                    var $nextCellInput = $(document.createElement("input")).attr("type", "text")
+                                                                           .addClass(boardCellInputClassname);
+                    var $nextCellLabel = $(document.createElement("span")).addClass("board-cell-label");
                     $(document.createElement("div")).attr("id", "row" + i + "col" + j)
                                                     .addClass("board-cell")
-                                                    .text(board[i][j] + "")
+                                                    .append($nextCellInput)
+                                                    .append($nextCellLabel)
                                                     .appendTo($boardRow);
                 }
 
@@ -107,6 +135,38 @@
          */
         function clearAllHoverEffects() {
             $boardDiv.find(".board-cell-hover").removeClass("board-cell-hover");
+        }
+
+        /*
+         * this helper returns true if the given dom element is a textbox
+         * for a board-cell, false otherwise
+         */
+        function isBoardCellTextbox(input) {
+            if (!input) return false;
+
+            if (typeof input.className !== 'string') return false;
+            if (typeof input.type !== 'string') return false;
+            if (typeof input.tagName !== 'string') return false;
+
+            return input.type.toUpperCase() === 'TEXT' &&
+                   input.tagName.toUpperCase() === 'INPUT' &&
+                   input.className === boardCellInputClassname;
+        }
+
+        /*
+         * this helper returns true if the given input is an acceptable
+         * boggle cell letter, false otherwise
+         */
+        function isValidBoggleCellLetter(input) {
+            if (typeof input !== 'string') return false;
+            if (input.length !== 1) return false;
+
+            input = input.toUpperCase();
+            for (var i = 0, iLen = validLetters.length; i < iLen; i++) {
+                if (input === validLetters[i]) return true;
+            }
+
+            return false;
         }
 
         // any time the user hovers their mouse over a 'word' in the result
@@ -146,8 +206,20 @@
             clearAllHoverEffects();
         });
 
+        /*
+         * respond to events in the textboxes of the various board cells
+         */
+        $boardDiv.keyup(function (e) {
+            if (!isBoardCellTextbox(e.target)) return;
+            if (!isValidBoggleCellLetter(e.target.value)) {
+                // todo - display a popup so the user knows they need to enter a valid letter
+                e.target.value = '';
+                return;
+            }
+        });
+
         // now render our board, so the user actually sees something!
-        renderBoard(board_model);
+        renderBoard(parseInt($boardSizeSelector.val()));
 
     })(jQuery, aoa, window, document);
     </script>
