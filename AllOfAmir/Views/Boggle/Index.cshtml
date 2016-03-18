@@ -11,11 +11,18 @@
 }
 
 <h2>Boggle!?</h2>
-<button type="button" id="test-button" class="btn">Click to test</button>
+
 <hr/>
 
-<div id="board"></div>
-<div id="results"></div>
+<div class="row">
+    <div class="col-sm-6">
+        <div id="board"></div>
+        <button type="button" id="solve-button" class="btn">SOLVE!</button>
+    </div>
+    <div class="col-sm-6">
+        <div id="results"></div>
+    </div>
+</div>
 
 @section scripts{ 
     <script type="text/javascript">
@@ -32,7 +39,7 @@
             $resultsDiv = $("div#results");
 
         /* for testing only - this should go away eventually */
-        $("#test-button").click(function () {
+        $("#solve-button").click(function () {
             aoa.loading();
             $.post({
                 url: service_url,
