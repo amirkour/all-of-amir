@@ -10,9 +10,19 @@
     </ol>
 }
 
-<h2>Boggle!?</h2>
-
+<h2>Boggle Solver!</h2>
 <hr/>
+
+<div class="row">
+    <div class="col-sm-12">
+        <p>
+            Select your board size from the pulldown, then fill-in the textboxes with your boggle board letters.
+            Once all the inputs are in place, click the 'solve' button to see a list of all valid words in your
+            board!
+        </p>
+        <p>If you enter a letter in error, simply click the letter to reset it.</p>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-sm-6">
@@ -42,12 +52,13 @@
                 ['e', 'o', 'r', 'n', 'd'],
                 ['a', 'a', 'a', 'a', 'a']
         ],
-            validLetters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
+            validLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
             service_url = "@Url.Action("GetBoggleWords", "Boggle")",
             $boardDiv = $("div#board"),
             $resultsDiv = $("div#results"),
             $boardSizeSelector = $("#board-size-selector"),
-            boardCellInputClassname = "board-cell-input";
+            boardCellInputClassname = "board-cell-input",
+            boardCellLabelClassname = "board-cell-label";
 
         /* when user selects a new board size, update the UI - gotta hide any
          * currently showing results in addition to changing board layout */
@@ -118,7 +129,7 @@
                 for (var j = 0; j < boardWidthAndHeight; j++) {
                     var $nextCellInput = $(document.createElement("input")).attr("type", "text")
                                                                            .addClass(boardCellInputClassname);
-                    var $nextCellLabel = $(document.createElement("span")).addClass("board-cell-label");
+                    var $nextCellLabel = $(document.createElement("span")).addClass(boardCellLabelClassname);
                     $(document.createElement("div")).attr("id", "row" + i + "col" + j)
                                                     .addClass("board-cell")
                                                     .append($nextCellInput)
@@ -151,6 +162,20 @@
             return input.type.toUpperCase() === 'TEXT' &&
                    input.tagName.toUpperCase() === 'INPUT' &&
                    input.className === boardCellInputClassname;
+        }
+
+        /*
+         * this helper returns true if the given dom element is a label
+         * for a board-cell, false otherwise
+         */
+        function isBoardCellLabel(input) {
+            if (!input) return false;
+
+            if (typeof input.className !== 'string') return false;
+            if (typeof input.tagName !== 'string') return false;
+
+            return input.tagName.toUpperCase() === 'SPAN' &&
+                   input.className === boardCellLabelClassname;
         }
 
         /*
@@ -215,6 +240,26 @@
                 // todo - display a popup so the user knows they need to enter a valid letter
                 e.target.value = '';
                 return;
+            }
+
+            // ok, the user's input is valid - display the label and hide the textbox
+            var $textbox = $(e.target),
+                $label = $textbox.parent().find('.' + boardCellLabelClassname);
+
+            $label.text($textbox.val()).show();
+            $textbox.hide();
+
+            /* also handle click events for board cell labels */
+        }).click(function (e) {
+            if (!isBoardCellLabel(e.target)) return;
+
+            $(e.target).hide().parent().find("." + boardCellInputClassname).show().focus().select();
+
+            /* also handle the 'focusout' event of board cell textboxes */
+        }).focusout(function (e) {
+            if (!isBoardCellTextbox(e.target)) return;
+            if (isValidBoggleCellLetter(e.target.value)) {
+                $(e.target).hide().parent().find("." + boardCellLabelClassname).text(e.target.value).show();
             }
         });
 
