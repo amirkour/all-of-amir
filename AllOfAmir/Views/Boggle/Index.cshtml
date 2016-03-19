@@ -317,7 +317,6 @@
                 // see it (especially on small screens.)
                 if (!isValidResultLink(e.target)) return;
                 illuminateWordFor(e.target);
-                $resultsDiv.disabled();
                 window.scrollTo(0, $boardDiv.offset().top);
             });
 
