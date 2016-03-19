@@ -303,6 +303,23 @@
                 $label.text($textbox.val()).show();
                 $textbox.hide();
 
+                // and now advance to the next textbox so the user can plug-and-chug
+                var $thisCell = $textbox.parent(),
+                    $neighborCell = $thisCell.next(".board-cell");
+
+                // if there's no neighbor cell, try advancing to the first
+                // cell in the next row of the board
+                if ($neighborCell.length <= 0)
+                    $neighborCell = $thisCell.parent().next(".board-row").find(".board-cell").first();
+
+                // if there's no neighbor, it just means the user has just filled out
+                // the last cell in the board (the bottom-right cell) in which case our
+                // work is done.  otherwise, focus on the next textbox
+                if ($neighborCell.length > 0) {
+                    $neighborCell.find("." + boardCellLabelClassname).hide();
+                    $neighborCell.find("." + boardCellInputClassname).show().focus().select();
+                }
+
                 /* also handle click events for board cell labels */
             }).click(function (e) {
                 if (!isBoardCellLabel(e.target)) return;
