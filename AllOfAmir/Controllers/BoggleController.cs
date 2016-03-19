@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using DotNetUtils;
 using Boggle;
+using DictionaryUtils;
 
 namespace AllOfAmir.Controllers
 {
@@ -55,7 +57,11 @@ namespace AllOfAmir.Controllers
         {
             Info("GetBoggleWords service: {0}", Stringify(board));
 
-            BoggleBoardHelper helper = new BoggleBoardHelper(board);
+            string affFilePath = Path.Combine(this.Request.PhysicalApplicationPath, "en_US.aff");
+            string dicFilePath = Path.Combine(this.Request.PhysicalApplicationPath, "en_US.dic");
+            IWordDefiner injectedWordDefiner = new HunspellWordDefiner(affFilePath, dicFilePath);
+
+            BoggleBoardHelper helper = new BoggleBoardHelper(board, injectedWordDefiner);
             List<BoggleResult> results = helper.GetAllWords(false, true); // TODO - expose these two bools to the client later ...
             
             return this.Json(results);

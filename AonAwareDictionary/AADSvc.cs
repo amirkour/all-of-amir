@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DictionaryUtils;
 using DotNetUtils;
 using AonAwareDictionary.com.aonaware.services;
 
@@ -16,7 +17,7 @@ namespace AonAwareDictionary
     /// See their website/service:
     /// http://services.aonaware.com/DictService/DictService.asmx
     /// </summary>
-    public class AADSvc
+    public class AADSvc : IWordDefiner
     {
         // the id of the english dictionary we're gonna use
         // (magic string complements of AAD's service.)

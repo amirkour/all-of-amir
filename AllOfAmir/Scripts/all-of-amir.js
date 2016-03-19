@@ -53,6 +53,21 @@
     var aoa = {
 
         /*
+         * helper that displays an error on the page
+         */
+        showError: function(msg){
+            if(typeof msg !== 'string') return;
+            displayErrorMessage(msg);
+        },
+
+        /*
+         * helper that clears all global feedback on the page
+         */
+        clearGlobalFeedback: function(){
+            clearGlobalErrors();
+        },
+
+        /*
          * this helper will display a loading dialog on the page and prevent
          * user input from being accepted until it's hidden again.
          * the dialog is courtesy of bootstrap.

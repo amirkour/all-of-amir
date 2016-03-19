@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Boggle")]
+[assembly: AssemblyTitle("DictionaryUtils")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Boggle")]
+[assembly: AssemblyProduct("DictionaryUtils")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("85f707f3-1dc8-4d58-87d1-226371cb0771")]
+[assembly: Guid("a6ce42c4-f7f2-4b3b-bfe4-f0a831577eb3")]
 
 // Version information for an assembly consists of the following four values:
 //

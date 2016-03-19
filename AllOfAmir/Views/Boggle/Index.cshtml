@@ -1,129 +1,395 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
+@section breadcrumbs
+{
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li><a href="@Url.Action("Professional", "Home")">Professional</a></li>
+        <li class="active">Boggle</li>
+    </ol>
+}
 
-<h2>Boggle!?</h2>
-<button type="button" id="test-button" class="btn">Click to test</button>
-<hr/>
+<h2>Boggle Solver!</h2>
+<hr />
 
-<div id="board"></div>
-<div id="results"></div>
+<div class="row">
+    <div class="col-sm-12">
+        <p>
+            Fill-in the textboxes with your boggle board letters.
+            Once all the inputs are in place, click the 'solve' button to see a list of all valid words in your
+            board!
+        </p>
+        <p>If you enter a letter in error, simply click the letter to reset it.</p>
+    </div>
+</div>
 
-@section scripts{ 
+<div class="row">
+    <div class="col-sm-6" style="text-align:center;">
+        <div>
+            <!-- for now, hiding boggle-board size selection and hardcoding to 4x4, because
+                 the azure box is too weak to handle bigger or more complex boards -->
+            <select class="form-control" id="board-size-selector" style="display:none;">
+                <option value="3">3x3</option>
+                <option value="4" selected>4x4</option>
+                <option value="5">5x5</option>
+            </select>
+        </div>
+        <div id="board"></div>
+        <button type="button" id="solve-button" class="btn btn-success">SOLVE!</button>
+    </div>
+    <div class="col-sm-6">
+        <div id="results-wrapper">
+            <h3 style="text-align:center; font-style:italic;">Results</h3>
+            <hr style="margin:0px 0px;padding:0px 0px;" />
+            <div id="results"></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
     <script type="text/javascript">
-    (function ($, aoa, window, document, undefined) {
+        (function ($, aoa, window, document, undefined) {
 
-        var board_model = [
-                ['h', 'e'],//, 'c', 'd'],
-                ['l', 'l']//, 'g', 'h'],
-                //['i', 'j', 'k', 'l'],
-                //['m', 'n', 'o', 'p']
-        ],
-            service_url = "@Url.Action("GetBoggleWords", "Boggle")",
-            $boardDiv = $("div#board"),
-            $resultsDiv = $("div#results");
+            var validLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+                service_url = "@Url.Action("GetBoggleWords", "Boggle")",
+                $boardDiv = $("div#board"),
+                $resultsDiv = $("div#results"),
+                $resultsWrapper = $("div#results-wrapper"),
+                $boardSizeSelector = $("#board-size-selector"),
+                boardCellInputClassname = "board-cell-input",
+                boardCellLabelClassname = "board-cell-label";
 
-        /* for testing only - this should go away eventually */
-        $("#test-button").click(function () {
-            aoa.loading();
-            $.post({
-                url: service_url,
-                data: { board: board_model },
-                dataType: 'json',
-                success: function (data, textStatus, jqXHR) {
-                    renderBoggleResults(data);
-                    aoa.loading(false);
-                },
-                error: aoa.ajaxErrorHandler
-            });
-        });
-
-        /*
-         * this helper will render the given list of BoggleResult objects on this page
-         */
-        function renderBoggleResults(results) {
-            if (!results) return;
-
-            // first, remove all the previous results
-            $resultsDiv.empty();
-
-            // now rifle through the new results and toss-em up on the page
-            for (var i = 0, iLen = results.length; i < iLen; i++) {
-                var nextResult = results[i],
-                    nextCoords = nextResult.Coords,
-                    nextWord = nextResult.Word,
-                    $nextAnchor = $(document.createElement('a')).addClass("result-word")
-                                                                .data('result-word', nextResult)
-                                                                .text(nextWord)
-                                                                .append( document.createElement('br') )
-                                                                .appendTo($resultsDiv);
+            /*
+             * helper that clears all/any results currently being displayed
+             */
+            function clearAllResults() {
+                $resultsDiv.empty();
             }
-        }
 
-        /*
-         * helper that renders the given 2D board of characters to the page
-         */
-        function renderBoard(board) {
-            for (var i = 0; i < board.length; i++) {
-                var $boardRow = $(document.createElement("div")).addClass("board-row");
-                for (var j = 0; j < board[i].length; j++) {
-                    $(document.createElement("div")).attr("id", "row" + i + "col" + j)
-                                                    .addClass("board-cell")
-                                                    .text(board[i][j] + "")
-                                                    .appendTo($boardRow);
+            /*
+             * this helper will render the given list of BoggleResult objects on this page
+             */
+            function renderBoggleResults(results) {
+                if (!results) return;
+
+                // first, remove all the previous results
+                clearAllResults();
+
+                // now rifle through the new results and toss-em up on the page
+                for (var i = 0, iLen = results.length; i < iLen; i++) {
+                    var nextResult = results[i],
+                        nextCoords = nextResult.Coords,
+                        nextWord = nextResult.Word,
+                        $nextAnchor = $(document.createElement('a')).addClass("result-word")
+                                                                    .data('result-word', nextResult)
+                                                                    .text(nextWord)
+                                                                    .append(document.createElement('br'))
+                                                                    .appendTo($resultsDiv);
                 }
 
-                $boardRow.appendTo($boardDiv);
-            }
-        }
-
-        /*
-         * helper that will clear all hovered/displayed words on the page
-         */
-        function clearAllHoverEffects() {
-            $boardDiv.find(".board-cell-hover").removeClass("board-cell-hover");
-        }
-
-        // any time the user hovers their mouse over a 'word' in the result
-        // list, we should highlight that word in the board.  just bind
-        // this listener to the parent div and catch only the targets we
-        // care about.
-        $resultsDiv.mouseover(function (e) {
-            var target = e.target;
-            if (!target) return;
-
-            var $target = $(target);
-
-            // if this isn't a result word that's being hovered on, we don't care
-            if (!$target.hasClass('result-word')) return;
-
-            // each result should have a BoggleResult in it's data cache.
-            // if it's not there, halt!
-            var targetData = $target.data('result-word');
-            if (!targetData) return;
-
-            // now that we've got the BoggleResult associated to the word
-            // that the user has hovered on, we need to highlight it in the
-            // board!  first, make sure nothing else is highlighted right now
-            clearAllHoverEffects();
-
-            // now iterate on this BoggleResult's coordinates and highlight
-            // the corresponding cells in the board/dom
-            for (var i = 0, iLen = targetData.Coords.length; i < iLen; i++) {
-                var nextCoord = targetData.Coords[i];
-                $boardDiv.find("div#row" + nextCoord.Row + "col" + nextCoord.Col).addClass("board-cell-hover");
+                $resultsWrapper.show();
             }
 
-        }).mouseout(function (e) {
+            /*
+             * helper that renders the given 2D board of characters to the page
+             */
+            function renderBoard(boardWidthAndHeight) {
+                if (typeof boardWidthAndHeight !== 'number') throw "Cannot render a board without a number";
+                if (boardWidthAndHeight <= 0) throw "Cannot render a board with a non-positive dimension";
 
-            // and when the user's mouse exits the result list, just clear any 
-            // displayed results
-            clearAllHoverEffects();
-        });
+                $boardDiv.empty();
+                for (var i = 0; i < boardWidthAndHeight; i++) {
+                    var $boardRow = $(document.createElement("div")).addClass("board-row");
+                    for (var j = 0; j < boardWidthAndHeight; j++) {
+                        var $nextCellInput = $(document.createElement("input")).attr("type", "text")
+                                                                               .addClass(boardCellInputClassname);
+                        var $nextCellLabel = $(document.createElement("span")).addClass(boardCellLabelClassname);
+                        $(document.createElement("div")).attr("id", "row" + i + "col" + j)
+                                                        .addClass("board-cell")
+                                                        .append($nextCellInput)
+                                                        .append($nextCellLabel)
+                                                        .appendTo($boardRow);
+                    }
 
-        // now render our board, so the user actually sees something!
-        renderBoard(board_model);
+                    $boardRow.appendTo($boardDiv);
+                }
+            }
 
-    })(jQuery, aoa, window, document);
+            /*
+             * helper that will clear all hovered/displayed words on the page
+             */
+            function clearAllHoverEffects() {
+                $boardDiv.find(".board-cell-hover").removeClass("board-cell-hover");
+            }
+
+            /*
+             * this helper returns true if the given dom element is a textbox
+             * for a board-cell, false otherwise
+             */
+            function isBoardCellTextbox(input) {
+                if (!input) return false;
+
+                if (typeof input.className !== 'string') return false;
+                if (typeof input.type !== 'string') return false;
+                if (typeof input.tagName !== 'string') return false;
+
+                return input.type.toUpperCase() === 'TEXT' &&
+                       input.tagName.toUpperCase() === 'INPUT' &&
+                       input.className === boardCellInputClassname;
+            }
+
+            /*
+             * this helper returns true if the given dom element is a label
+             * for a board-cell, false otherwise
+             */
+            function isBoardCellLabel(input) {
+                if (!input) return false;
+
+                if (typeof input.className !== 'string') return false;
+                if (typeof input.tagName !== 'string') return false;
+
+                return input.tagName.toUpperCase() === 'SPAN' &&
+                       input.className === boardCellLabelClassname;
+            }
+
+            /*
+             * this helper returns true if the given input is an acceptable
+             * boggle cell letter, false otherwise
+             */
+            function isValidBoggleCellLetter(input) {
+                if (typeof input !== 'string') return false;
+                if (input.length !== 1) return false;
+
+                input = input.toUpperCase();
+                for (var i = 0, iLen = validLetters.length; i < iLen; i++) {
+                    if (input === validLetters[i]) return true;
+                }
+
+                return false;
+            }
+
+            /*
+             * this helper returns true if the given parameter
+             * is a link in the result list, false otherwise
+             */
+            function isValidResultLink(link) {
+                if (typeof link === 'undefined') return false;
+                if (typeof link.tagName !== 'string') return false;
+                if (typeof link.className !== 'string') return false;
+
+                return link.tagName.toUpperCase() === 'A' &&
+                       link.className === 'result-word';
+            }
+
+            /*
+             * this helper returns true if the current boggle board has
+             * a valid letter/input present in every one of it's cells,
+             * false otherwise
+             */
+            function boardInputsAreComplete() {
+                var result = true;
+                $boardDiv.find(".board-cell").each(function (index) {
+                    // 'this' is the current board cell dom element
+                    var $textbox = $(this).find("." + boardCellInputClassname);
+                    if (!isValidBoggleCellLetter($textbox.val())) {
+                        result = false;
+                        return false;
+                    }
+                });
+
+                return result;
+            }
+
+            /*
+             * helper that converts the contents of the board into a 2d array
+             * of characters - returns this array if all inputs are filled out,
+             * or null if the inputs aren't filled out
+             */
+            function getArrayOfBoardCharacters() {
+                var boardSize = parseInt($boardSizeSelector.val()),
+                    array = [],
+                    $cells = $boardDiv.find(".board-cell"),
+                    nextRow = [],
+                    textboxClass = "." + boardCellInputClassname;
+
+                $cells.each(function (i) {
+
+                    // if this board cell is a new row, push the previous row to the list
+                    // of results and start the 'next row' array over again
+                    if (i % boardSize == 0 && nextRow.length > 0) {
+                        array.push(nextRow);
+                        nextRow = [];
+                    }
+
+                    nextRow.push($(this).find(textboxClass).val());
+                });
+
+                // the last row has to get pushed to the results
+                if (nextRow.length > 0) array.push(nextRow);
+
+                return array;
+            }
+
+            /*
+             * this helper will illuminate the result associated
+             * to the given 'a' element in the list of results
+             */
+            function illuminateWordFor(resultAnchor) {
+                var $target = $(resultAnchor),
+                    targetData = $target.data('result-word');
+
+                // each result should have a BoggleResult in it's data cache.
+                // if it's not there, halt!
+                if (!targetData) return;
+
+                // now that we've got the BoggleResult associated to the word
+                // that the user has hovered on, we need to highlight it in the
+                // board!  first, make sure nothing else is highlighted right now
+                clearAllHoverEffects();
+
+                // now iterate on this BoggleResult's coordinates and highlight
+                // the corresponding cells in the board/dom
+                for (var i = 0, iLen = targetData.Coords.length; i < iLen; i++) {
+                    var nextCoord = targetData.Coords[i];
+                    $boardDiv.find("div#row" + nextCoord.Row + "col" + nextCoord.Col).addClass("board-cell-hover");
+                }
+            }
+
+            /* when user selects a new board size, update the UI - gotta hide any
+             * currently showing results in addition to changing board layout */
+            $boardSizeSelector.change(function (e) {
+                var selectedValue = e.target.value;
+                clearAllResults();
+                renderBoard(parseInt(selectedValue));
+            });
+
+            /* when user clicks the 'solve' button, send their board to the server for results */
+            $("#solve-button").click(function () {
+                clearAllHoverEffects();
+
+                if (!boardInputsAreComplete()) {
+                    aoa.showError("All inputs must be filled out!");
+                    return;
+                }
+
+                var boardModel = getArrayOfBoardCharacters();
+                if (!boardModel) {
+                    aoa.showError("There was an error retrieving your board characters ... please ensure they are filled out and try again");
+                    return;
+                }
+
+                aoa.loading();
+                $.post({
+                    url: service_url,
+                    data: { board: boardModel },
+                    dataType: 'json',
+                    success: function (data, textStatus, jqXHR) {
+                        renderBoggleResults(data);
+                    },
+                    error: aoa.ajaxErrorHandler
+                }).done(function () {
+                    aoa.loading(false);
+                }).fail(function () {
+                    aoa.loading(false);
+                });
+            });
+
+            /* any time the user hovers their mouse over a 'word' in the result
+             * list, we should highlight that word in the board.  just bind
+             * this listener to the parent div and catch only the targets we
+             * care about. */
+            $resultsDiv.mouseover(function (e) {
+
+                if (!isValidResultLink(e.target)) return;
+                illuminateWordFor(e.target);
+
+            }).mouseout(function (e) {
+
+                // and when the user's mouse exits the result list, just clear any
+                // displayed results
+                //clearAllHoverEffects();
+
+            }).click(function (e) {
+
+                // when the use clicks one of their results, keep it displayed
+                // in the board and scroll to the top of the page so they can
+                // see it (especially on small screens.)
+                if (!isValidResultLink(e.target)) return;
+                illuminateWordFor(e.target);
+                $resultsDiv.disabled();
+                window.scrollTo(0, $boardDiv.offset().top);
+            });
+
+            /*
+             * respond to events in the textboxes of the various board cells
+             */
+            $boardDiv.keyup(function (e) {
+
+                clearAllHoverEffects();
+                if (!isBoardCellTextbox(e.target)) return;
+                if (!isValidBoggleCellLetter(e.target.value)) {
+                    // todo - display a popup so the user knows they need to enter a valid letter
+                    e.target.value = '';
+                    return;
+                }
+
+                // ok, the user's input is valid - display the label and hide the textbox
+                var $textbox = $(e.target),
+                    $label = $textbox.parent().find('.' + boardCellLabelClassname);
+
+                $label.text($textbox.val()).show();
+                $textbox.hide();
+
+                // and now advance to the next textbox so the user can plug-and-chug
+                var $thisCell = $textbox.parent(),
+                    $neighborCell = $thisCell.next(".board-cell");
+
+                // if there's no neighbor cell, try advancing to the first
+                // cell in the next row of the board
+                if ($neighborCell.length <= 0)
+                    $neighborCell = $thisCell.parent().next(".board-row").find(".board-cell").first();
+
+                // if there's no neighbor, it just means the user has just filled out
+                // the last cell in the board (the bottom-right cell) in which case our
+                // work is done.  otherwise, focus on the next textbox
+                if ($neighborCell.length > 0) {
+                    $neighborCell.find("." + boardCellLabelClassname).hide();
+                    $neighborCell.find("." + boardCellInputClassname).show().focus().select();
+                }
+
+                /* also handle click events for board cells */
+            }).click(function (e) {
+
+                clearAllHoverEffects();
+
+                // did they click the board cell itself, or one of it's children?
+                // in either case, make the corresponding board cell's text input
+                // available for input
+                var $this = $(e.target);
+                if ($this.hasClass('.board-cell')) {
+                    $this.find("." + boardCellLabelClassname).hide();
+                    $this.find("." + boardCellInputClassname).show().focus().select();
+                } else {
+                    $this.closest(".board-cell").find("." + boardCellLabelClassname).hide();
+                    $this.closest(".board-cell").find("." + boardCellInputClassname).show().focus().select();
+                }
+
+                /* also handle the 'focusout' event of board cell textboxes */
+            }).focusout(function (e) {
+
+                clearAllHoverEffects();
+                if (!isBoardCellTextbox(e.target)) return;
+
+                // if the textbox has valid input, hide the textbox, and populate/show
+                // the corresponding label
+                if (isValidBoggleCellLetter(e.target.value))
+                    $(e.target).hide().parent().find("." + boardCellLabelClassname).text(e.target.value).show();
+            });
+
+            // now render our board, so the user actually sees something!
+            renderBoard(parseInt($boardSizeSelector.val()));
+
+        })(jQuery, aoa, window, document);
     </script>
 }

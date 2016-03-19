@@ -21,3 +21,9 @@ PublishProfiles/
 *.log.*
 
 applicationhost.config
+
+# the web project has a post-build event that copies all the hunspell
+# aff and dic files to the project folder (which is necessary for the
+# release deployment to work in azure.)  dont check them into the repo!
+AllOfAmir/*.aff
+AllOfAmir/*.dic
