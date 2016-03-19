@@ -50,7 +50,8 @@
 .board-cell:first-child {
     margin-left: 0;
 }
-.board-cell:hover, .board-cell-hover {
+/*.board-cell:hover,*/ 
+.board-cell-hover {
     -webkit-box-shadow: 0px 0px 5px 10px #d0d0e1;
     -moz-box-shadow: 0px 0px 5px 10px #d0d0e1;
     box-shadow: 0px 0px 5px 10px #d0d0e1;
