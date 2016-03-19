@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using DotNetUtils
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -23,6 +24,9 @@
     </div>
 
     <div class="container">
+
+        @* don't render nav/breadcrumb junk on the homepage - it's redundant for now *@
+        @if (!Request.IsForHompage()) {@RenderSection("breadcrumbs", required: false)}
 
         <div id="global-error" class="alert alert-danger"></div>
         @RenderBody()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DictionaryUtils;
 using DotNetUtils;
 using AonAwareDictionary;
 
@@ -15,7 +16,7 @@ namespace Boggle
     public class BoggleBoardHelper
     {
         protected char[][] _board;
-        protected AADSvc _dictionaryService;
+        protected IWordDefiner _dictionaryService;
 
         // default construction isn't allowed, since this class is meaningless
         // without a 2D array of chars
@@ -28,7 +29,16 @@ namespace Boggle
         {
             if (board == null) throw new Exception("A boggle board helper cannot be instantiated without a non-null 2D board of chars");
             _board = board;
-            _dictionaryService = new AADSvc();
+            _dictionaryService = new HunspellWordDefiner();
+        }
+
+        public BoggleBoardHelper(char[][] board, IWordDefiner wordDefiner)
+        {
+            if (board == null) throw new Exception("A boggle board helper cannot be instantiated without a non-null 2D board of chars");
+            if (wordDefiner == null) throw new Exception("A boggle board helper cannot be instantiated without a non-null word definer implementation");
+
+            _board = board;
+            _dictionaryService = wordDefiner;
         }
 
         /// <summary>
@@ -193,6 +203,7 @@ namespace Boggle
             {
                 for(int j = 0; j < _board[i].Length; j++)
                 {
+                    System.Diagnostics.Trace.TraceInformation("getting everything at " + _board[i][j]);
                     currentResults = this.GetAllWordsStartingAt(new BoggleCoord() { Row = i, Col = j }, allowDiagonalsForNeighbors, excludeSingleLetterWords);
                     if(!currentResults.IsNullOrEmpty())
                         currentResults.ForEach(result => masterList.Add(result));

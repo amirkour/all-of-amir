@@ -23,6 +23,15 @@
 #global-error{display:none;}
 .board-row {
 }
+#solve-button {
+    width: 75%;
+    margin-bottom: 20px;
+}
+#board{
+    padding-top:20px;
+    padding-bottom:10px;
+    text-align:center;
+}
 .board-cell {
     width: 70px;
     height: 70px;
@@ -33,19 +42,44 @@
     display: inline-block;
     cursor: pointer;
     color: #fff;
-    font-size: 20px;
+    font-size: 25px;
     margin-left: 10px;
     margin-bottom: 10px;
+    padding-top:15px;
 }
 .board-cell:first-child {
     margin-left: 0;
 }
-.board-cell:hover, .board-cell-hover {
+/*.board-cell:hover,*/ 
+.board-cell-hover {
     -webkit-box-shadow: 0px 0px 5px 10px #d0d0e1;
     -moz-box-shadow: 0px 0px 5px 10px #d0d0e1;
     box-shadow: 0px 0px 5px 10px #d0d0e1;
 }
-
+.board-cell-input{
+    max-width:30px;
+    max-height:35px;
+    border-radius:5px;
+    background-color:#f0f0f5;
+    color:black;
+    text-align:center;
+}
+.board-cell-label{
+    display:none;
+}
+#results{
+    max-height:320px;
+    overflow-y:auto;
+    padding: 10px 10px;
+    line-height: 1.5;
+    font-size:1.4em;
+}
 .result-word{
     cursor:pointer;
+}
+#results-wrapper{
+    padding:0px 10px 10px 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    display:none;
 }

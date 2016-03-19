@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{85F707F3-1DC8-4D58-87D1-226371CB0771}</ProjectGuid>
+    <ProjectGuid>{A6CE42C4-F7F2-4B3B-BFE4-F0A831577EB3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Boggle</RootNamespace>
-    <AssemblyName>Boggle</AssemblyName>
+    <RootNamespace>DictionaryUtils</RootNamespace>
+    <AssemblyName>DictionaryUtils</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,9 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="NHunspell">
+      <HintPath>..\3rd party libs\Hunspell\NHunspell.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,28 +43,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoggleBoardHelper.cs" />
-    <Compile Include="BoggleCoord.cs" />
-    <Compile Include="BoggleLetter.cs" />
-    <Compile Include="BoggleResult.cs" />
+    <Compile Include="HunspellWordDefiner.cs" />
+    <Compile Include="IWordDefiner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AonAwareDictionary\AonAwareDictionary.csproj">
-      <Project>{c6bbd107-0198-4ef4-8040-86c81ffb9be2}</Project>
-      <Name>AonAwareDictionary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DictionaryUtils\DictionaryUtils.csproj">
-      <Project>{a6ce42c4-f7f2-4b3b-bfe4-f0a831577eb3}</Project>
-      <Name>DictionaryUtils</Name>
-    </ProjectReference>
+    <None Include="hunspell runtime dependencies\en_US.aff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="hunspell runtime dependencies\en_US.dic">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="hunspell runtime dependencies\Hunspellx64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="hunspell runtime dependencies\Hunspellx64.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="hunspell runtime dependencies\Hunspellx86.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="hunspell runtime dependencies\Hunspellx86.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="README.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\DotNetUtils\DotNetUtils.csproj">
       <Project>{7735820b-ac15-4a64-a820-5b0b382abefd}</Project>
       <Name>DotNetUtils</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
