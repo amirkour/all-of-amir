@@ -2,10 +2,15 @@
     padding-top: 50px;
     padding-bottom: 20px;
     background-color:#e0e0eb;
+    background-image: url('/img/background.jpg');
+    font-size:20px;
 }
 .container{
     background-color:white;
     padding:20px 20px;
+    -webkit-box-shadow: 0px 0px 5px 5px gray;
+    -moz-box-shadow: 0px 0px 5px 5px gray;
+    box-shadow: 0px 0px 5px 5px gray;
 }
 #all-of-amir{
     background: url('/img/all of amir-01.png') no-repeat right top;
@@ -24,6 +29,9 @@
     text-align:center;
     padding:20px 20px;
 }
+#professional-tile{
+    font-family: Consolas, serif;
+}
 
 @media (min-width: 768px) {
     .home-tile {
@@ -31,16 +39,15 @@
         height: 200px;
         text-align: center;
         vertical-align: middle;
-        border-radius:5px;
         -webkit-transition-duration: 0.3s;
         transition-duration: 0.3s;
         -webkit-transition-property: box-shadow;
         transition-property:box-shadow;
     }
     .home-tile:hover, .home-tile:active, .home-tile:focus{
-         -webkit-box-shadow: 0px 0px 5px 5px #d0d0e1;
-        -moz-box-shadow: 0px 0px 5px 5px #d0d0e1;
-        box-shadow: 0px 0px 5px 5px #d0d0e1;
+        -webkit-box-shadow: 0px 0px 5px 5px #56bcd6;
+        -moz-box-shadow: 0px 0px 5px 5px #56bcd6;
+        box-shadow: 0px 0px 5px 5px #56bcd6;
     }
     .home-tile h3{
         display: table-cell;
@@ -48,7 +55,6 @@
         height:inherit;
         width:inherit;
         text-align:center;
-        font-style:italic;
         color:blue;
         padding: 10px 10px;
         text-decoration:underline;
