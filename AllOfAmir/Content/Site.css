@@ -15,6 +15,11 @@
 #all-of-amir{
     background: url('/img/all of amir-01.png') no-repeat right top;
 }
+@media (max-width: 767px) {
+    #all-of-amir {
+        color: white;
+    }
+}
 #loading-dialog{
     display:none;
 }
@@ -29,8 +34,18 @@
     text-align:center;
     padding:20px 20px;
 }
+
 #professional-tile{
     font-family: Consolas, serif;
+}
+#personal-tile{
+    background-color:#decdbd;
+}
+#personal-tile h3{
+    color:gray;
+    font-family: cursive serif;
+    font-style: italic;
+    font-family:cursive Arial serif;
 }
 
 @media (min-width: 768px) {
@@ -43,11 +58,6 @@
         transition-duration: 0.3s;
         -webkit-transition-property: box-shadow;
         transition-property:box-shadow;
-    }
-    .home-tile:hover, .home-tile:active, .home-tile:focus{
-        -webkit-box-shadow: 0px 0px 5px 5px #56bcd6;
-        -moz-box-shadow: 0px 0px 5px 5px #56bcd6;
-        box-shadow: 0px 0px 5px 5px #56bcd6;
     }
     .home-tile h3{
         display: table-cell;
@@ -70,11 +80,23 @@
 
     #personal-tile {
         float: right;
+        background: url('/img/personal.png');
+        border: 2px solid white;
+    }
+    #personal-tile:hover, #personal-tile:active, #personal-tile:focus{
+        -webkit-box-shadow: 0px 0px 10px 10px #decdbd;
+        -moz-box-shadow: 0px 0px 10px 10px #decdbd;
+        box-shadow: 0px 0px 10px 10px #decdbd;
     }
 
     #professional-tile {
         float: left;
         background: url('/img/code200x200.png');
+    }
+    #professional-tile:hover, #professional-tile:active, #professional-tile:focus{
+        -webkit-box-shadow: 0px 0px 5px 5px #56bcd6;
+        -moz-box-shadow: 0px 0px 5px 5px #56bcd6;
+        box-shadow: 0px 0px 5px 5px #56bcd6;
     }
 }
 .board-row {
