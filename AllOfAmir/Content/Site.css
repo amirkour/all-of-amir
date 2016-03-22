@@ -102,6 +102,9 @@
     margin-left: 10px;
     margin-bottom: 10px;
     padding-top:15px;
+    -webkit-box-shadow:2px 2px 1px 1px gray;
+    -moz-box-shadow:2px 2px 1px 1px gray;
+    box-shadow:2px 2px 1px 1px gray;
 }
 .board-cell:first-child {
     margin-left: 0;
@@ -135,7 +138,5 @@
 }
 #results-wrapper{
     padding:0px 10px 10px 10px;
-    border: 1px solid gray;
-    border-radius: 5px;
     display:none;
 }
