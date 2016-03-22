@@ -1,6 +1,11 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color:#e0e0eb;
+}
+.container{
+    background-color:white;
+    padding:20px 20px;
 }
 #all-of-amir{
     background: url('/img/all of amir-01.png') no-repeat right top;
@@ -10,21 +15,60 @@
 }
 #global-error{display:none;}
 
+.home-tile{
+    height:100px;
+    background-color: #e0e0eb;
+    color:blue;
+}
+.home-tile h3{
+    text-align:center;
+    padding:20px 20px;
+}
+
 @media (min-width: 768px) {
     .home-tile {
         width: 200px;
         height: 200px;
         text-align: center;
-        border: 1px solid black;
         vertical-align: middle;
+        border-radius:5px;
+        -webkit-transition-duration: 0.3s;
+        transition-duration: 0.3s;
+        -webkit-transition-property: box-shadow;
+        transition-property:box-shadow;
+    }
+    .home-tile:hover, .home-tile:active, .home-tile:focus{
+         -webkit-box-shadow: 0px 0px 5px 5px #d0d0e1;
+        -moz-box-shadow: 0px 0px 5px 5px #d0d0e1;
+        box-shadow: 0px 0px 5px 5px #d0d0e1;
+    }
+    .home-tile h3{
+        display: table-cell;
+        vertical-align:bottom;
+        height:inherit;
+        width:inherit;
+        text-align:center;
+        font-style:italic;
+        color:blue;
+        padding: 10px 10px;
+        text-decoration:underline;
+        -webkit-transition-duration: 0.3s;
+        transition-duration: 0.3s;
+        -webkit-transition-property: transform;
+        transition-property:transform;
+    }
+    .home-tile h3:hover, .home-tile h3:active, .home-tile h3:focus{
+        -webkit-transform: translateY(-5px);
+         transform: translateY(-5px);
     }
 
-    #personal-section {
+    #personal-tile {
         float: right;
     }
 
-    #professional-section {
+    #professional-tile {
         float: left;
+        background: url('/img/code200x200.png');
     }
 }
 .board-row {
