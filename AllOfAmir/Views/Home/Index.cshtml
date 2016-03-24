@@ -2,28 +2,15 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron" id="all-of-amir">
+<div class="jumbotron" id="home-page-jumbotron">
     <h1>All of Amir</h1>
 </div>
 
-<div style="text-align: center; ">
-    <div class="pop" id="left">
-        <ul>
-            <li><a href="@Url.Action("Personal","Home")">Personal</a></li>
-            <li><a href="@Url.Action("Professional","Home")">Professional</a></li>
-        </ul>
+<div style="text-align: center;" class="row">
+    <div class="col-sm-6" >
+        <a href="@Url.Action("Personal","Home")"><div class="home-tile" id="personal-tile"><h3>Personal</h3></div></a>
     </div>
-    <div class="pop" id="right">
-        this is paragraph 2
+    <div class="col-sm-6">
+        <a href="@Url.Action("Professional","Home")"><div class="home-tile" id="professional-tile"><h3>professional()</h3></div></a>
     </div>
 </div>
-
-@section scripts
-{
-    <script type="text/javascript">
-        (function($, window, document, undefined){
-
-            $("#right").text("this was inserted by jquery - hurray!?");
-        })(jQuery, window, document);
-    </script>
-}

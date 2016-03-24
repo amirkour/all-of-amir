@@ -111,9 +111,6 @@ namespace AllOfAmir.Controllers
                         filterContext.Exception.Message :
                         "An unspecified error was encountered";
 
-                    //JsonResult json = this.Json(new { Error = msg });
-                    //Response.Write(this.Stringify(json));
-
                     Response.Clear();
                     Response.StatusCode = 500;
                     Response.TrySkipIisCustomErrors = true;
