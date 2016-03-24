@@ -15,14 +15,25 @@
 </div>
 
 <div class="page-intro">
-    this is my professional page, where i do stuff with code.  checkout my projects and junk.
+    <p><em>Welcome to my professional page!</em></p>
+    <p>
+        Over the years, I've encountered various problems/excercises in my career as a software engineer.
+        As a visual and kinesthetic learner, I've often found it difficult to fully appreciate
+        the nuances of these problems - my fellow engineers will recognize them (design a bank of
+        elevators, a traffic light, an algorithm that models/validates a March Madness bracket, etc.)
+    </p>
+    <p>
+        This page contains my approaches to some of these - none are necessarily
+        the best solution to each problem.  I wanted to visualize them, and to get some experience and
+        insight into their implementations (or at least, one version of their implimentations.)
+    </p>
 </div>
 
 <ul class="project-list">
     <li class="project-list-item">
         <div class="project-list-item-banner" id="boggle-project-banner">
             <a href="@Url.Action("Index","Boggle")">
-                <img class="project-list-item-banner-image" src="/img/boggle_banner_small.png"/>
+                <img class="project-list-item-banner-image" src="/img/boggle_thumb.png"/>
                 <h4>Boggle Solver</h4>
             </a>
         </div>
@@ -30,7 +41,8 @@
             <h4>
                 <a href="@Url.Action("Index","Boggle")">Boggle Solver</a>
             </h4>
-            this is a description for Boggle Solver that's longer than the typical description ...
+            Remember <a href="https://en.wikipedia.org/wiki/Boggle">Boggle</a>?  This is a basic/simple implementation for a boggle solver - enter your letters and
+            the algorithm will give you a list of valid words
         </div>
     </li>
 </ul>
