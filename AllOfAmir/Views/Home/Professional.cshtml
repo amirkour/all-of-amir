@@ -18,15 +18,19 @@
     this is my professional page, where i do stuff with code.  checkout my projects and junk.
 </div>
 
-<hr/>
-
-<div class="project-intro">
-    <div class="project-intro-banner" id="boggle-project-banner">
-        <h3>Boggle Solver</h3>
-    </div>
-    <div class="project-intro-description">
-    this is a description for <a href="@Url.Action("Index","Boggle")">Boggle Solver</a>
-    </div>
-</div>
-
-<hr/>
+<ul class="project-list">
+    <li class="project-list-item">
+        <div class="project-list-item-banner" id="boggle-project-banner">
+            <a href="@Url.Action("Index","Boggle")">
+                <img class="project-list-item-banner-image" src="/img/boggle_banner_small.png"/>
+                <h4>Boggle Solver</h4>
+            </a>
+        </div>
+        <div class="project-list-item-description">
+            <h4>
+                <a href="@Url.Action("Index","Boggle")">Boggle Solver</a>
+            </h4>
+            this is a description for Boggle Solver that's longer than the typical description ...
+        </div>
+    </li>
+</ul>
