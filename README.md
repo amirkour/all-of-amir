@@ -1,2 +1,1 @@
-testing testing
-testing again ...
+This repo is hosting an ongoing project that I intend to use as my personal portfolio.  It's currently being implemented using .NET/MVC5, hosted on Azure, and following git-flow for sprint and release management.  
